@@ -14,55 +14,55 @@
         * { box-sizing: border-box; }
         body { 
             margin: 0; font-family: 'Poppins', sans-serif; color: white; background-color: var(--ana-koyu);
-            line-height: 1.6; overflow-x: hidden;
+            line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth;
         }
 
-        /* === ANA SAYFA GİRİŞ (HERO) === */
+        /* === HERO SECTION (LOGOLU VE ARKA PLANLI) === */
         .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
-                        url('https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1920&q=80'); /* İslam Mimarisi Görseli */
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.92)), 
+                        url('https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1920&q=80');
             background-size: cover; background-position: center; text-align: center; padding: 20px;
+            position: relative; /* Filigran için gerekli */
         }
 
-        .hero h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--altin); margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .hero p { font-size: 1.2rem; max-width: 700px; color: #ddd; margin: 20px 0; }
+        /* === 1. ARKA PLAN FİLİGRAN LOGO (HAFİFÇE YEDİRİLMİŞ) === */
+        .hero::before {
+            content: '';
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; height: 400px; /* Logonun boyutu */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0.03; /* Çok düşük şeffaflık (Arka plana yedirme) */
+            z-index: 1; pointer-events: none; /* Tıklamayı engeller */
+        }
+
+        .hero * { z-index: 2; } /* İçerikleri logonun önüne çıkarır */
+        .hero h1 { font-family: 'Cinzel', serif; font-size: 3rem; color: var(--altin); margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .hero p { font-size: 1.1rem; max-width: 650px; color: #ccc; margin: 15px 0 30px; }
         
-        .scroll-down { margin-top: 50px; font-size: 0.9rem; color: var(--altin); animation: bounce 2s infinite; }
+        .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 500px; width: 100%; }
+        .nav-btn { padding: 12px; border: 1px solid var(--altin); color: white; text-decoration: none; font-size: 0.8rem; background: rgba(0,0,0,0.5); font-weight: bold; border-radius: 5px; text-align: center; transition: 0.3s; }
+        .nav-btn:hover { background: var(--altin); color: var(--ana-koyu); }
 
-        /* === HIZLI ERİŞİM PORTALI === */
-        .portal-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px; width: 100%; max-width: 1100px; margin-top: 40px;
-        }
-        .portal-card {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(197, 160, 89, 0.3);
-            padding: 30px; border-radius: 15px; text-decoration: none; color: white;
-            transition: 0.3s; text-align: center; backdrop-filter: blur(10px);
-        }
-        .portal-card:hover { background: var(--altin); color: var(--ana-koyu); transform: translateY(-10px); }
-        .portal-card h3 { font-family: 'Cinzel', serif; margin-bottom: 10px; }
-
-        /* === ZAMAN TÜNELİ ALANI (ESKİ MEKANİK KORUNDU) === */
-        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.5rem; margin: 80px 0 40px; }
+        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.2rem; margin: 60px 0 30px; }
         
-        .timeline-wrapper {
-            padding-top: 350px; padding-bottom: 100px; background: #0d0d0d;
-            overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin);
-        }
+        /* === HARİTALAR BÖLÜMÜ === */
+        .map-selector { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; margin-bottom: 20px; scrollbar-width: thin; scrollbar-color: var(--altin) transparent; }
+        .map-btn { padding: 10px 18px; background: var(--kart-bg); border: 1px solid var(--altin); color: var(--altin); border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; font-weight: bold; }
+        #map-display-container { width: 100%; border: 1px solid var(--altin); border-radius: 10px; overflow: hidden; background: #000; min-height: 250px; position: relative; }
+        #map-display { width: 100%; display: none; cursor: zoom-in; }
+
+        /* === ZAMAN TÜNELİ ALANI === */
+        .timeline-wrapper { padding-top: 350px; padding-bottom: 100px; background: #0d0d0d; overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin); }
         .timeline-rail { position: relative; height: 4px; background: var(--altin); margin: 0 200px; }
         
         .time-box { position: absolute; width: 220px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; transition: 0.4s; }
-        .box-content { 
-            padding: 12px; border-radius: 10px; font-size: 0.8rem; background: #1a1a1a; 
-            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px;
-        }
+        .box-content { padding: 12px; border-radius: 10px; font-size: 0.8rem; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px; }
         .box-content.expanded { width: 300px; z-index: 100; border-color: var(--altin); }
         .details-text { display: none; font-size: 0.75rem; margin-top: 10px; color: #ccc; }
         .box-content.expanded .details-text { display: block; }
 
-        /* Renkler */
         .tip-hadise { border-bottom: 4px solid var(--hadise); }
         .tip-bilgin { border-bottom: 4px solid var(--bilgin); }
         .tip-mimari { border-bottom: 4px solid var(--mimari); }
@@ -71,31 +71,21 @@
         .time-node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; border: 2px solid var(--altin); }
         .box-line { position: absolute; left: 50%; width: 1px; background: var(--altin); opacity: 0.3; }
 
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        @media (max-width: 600px) { h1 { font-size: 2rem; } .nav-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <div class="hero">
         <h1>GENÇLİĞİN DİJİTAL RAHLESİ</h1>
-        <p>İslam düşünce geleneğini, kadim bilginleri ve muazzam eserleri keşfedebileceğiniz dijital bir yolculuk.</p>
+        <p>İslam medeniyetinin düşünce atlasını, bilginlerini ve eserlerini interaktif bir zaman tüneliyle keşfedin.</p>
         
-        <div class="portal-grid">
-            <a href="#time-sec" class="portal-card">
-                <h3>ZAMAN ATLASI</h3>
-                <p>571'den günümüze interaktif kronoloji.</p>
-            </a>
-            <a href="#map-sec" class="portal-card">
-                <h3>DÜŞÜNCE HARİTALARI</h3>
-                <p>İlim havzaları ve coğrafi dağılım.</p>
-            </a>
-            <a href="#dynamic-content" class="portal-card">
-                <h3>KÜTÜPHANE</h3>
-                <p>Bilginler ve eserler kataloğu.</p>
-            </a>
+        <div class="nav-grid">
+            <a href="#time-sec" class="nav-btn">ZAMAN ATLASI</a>
+            <a href="#map-sec" class="nav-btn">DÜŞÜNCE HARİTALARI</a>
+            <a href="#mimari" class="nav-btn">MİMARİ ESERLER</a>
+            <a href="#kurumlar" class="nav-btn">KURUMLAR</a>
         </div>
-        
-        <div class="scroll-down">Aşağı Kaydır ▼</div>
     </div>
 
     <div id="time-sec">
@@ -105,19 +95,33 @@
         </div>
     </div>
 
-    <div id="dynamic-content"></div>
+    <div id="map-sec" class="section" style="padding: 40px 20px; max-width: 1000px; margin: 0 auto;">
+        <h2 class="section-title">MEDENİYET HAVZALARI & HARİTALAR</h2>
+        <div class="map-selector" id="map-buttons"></div>
+        <div id="map-display-container">
+            <img id="map-display" src="" alt="Atlas Haritası">
+            <p id="map-placeholder" style="text-align:center; padding:80px; color:#555; font-style:italic;">Lütfen yukarıdan bir harita seçiniz (Büyütmek için üzerine tıklayın).</p>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
     <script>
         const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
         let currentZoom = 30;
+        const zoom = mediumZoom('#map-display', { background: '#0a0a0a' });
 
         async function yukle() {
             try {
                 const res = await fetch(API_URL + "?v=" + Math.random());
                 const data = await res.json();
+                document.getElementById('main-title').innerText = data.site_ayarlari.baslik;
+
+                // --- 2. KRONOLOJİ İŞLEME VE PEYGAMBERİMİZ'İN (SAV) DOĞUMUNU EKLEME ---
+                const track = document.getElementById('rail');
                 
-                // Veri birleştirme mantığı (Aynı kalıyor)
+                // Verileri (hadise, bilgin, mimari, kurum) birleştirme
                 let combined = data.kronoloji.map(k => ({yil: k.yil, olay: k.olay, ozet: k.olay, tip: "hadise"}));
+                
                 data.kategoriler.forEach(kat => {
                     kat.liste.forEach(item => {
                         let yilMatch = item.ad.match(/\d+/);
@@ -132,14 +136,25 @@
                     });
                 });
 
-                const sortedData = combined.sort((a,b) => a.yil - b.yil);
-                const rail = document.getElementById('rail');
+                // Veriyi yıla göre sırala
+                let sortedData = combined.sort((a,b) => parseInt(a.yil) - parseInt(b.yil));
+
+                // === 3. EFENDİMİZ (SAV) OTOMATİK EKLEME (Eğer en başta yoksa) ===
+                if(sortedData.length > 0 && parseInt(sortedData[0].yil) !== 571) {
+                    sortedData.unshift({
+                        yil: 571,
+                        olay: "Hz. Muhammed (SAV) Efendimizin Dünyaya Teşrifleri",
+                        ozet: "Peygamber Efendimizin (SAV) Mekke-i Mükerreme'de dünyaya gelmesiyle karanlıklar aydınlanmaya başladı.",
+                        tip: "hadise"
+                    });
+                }
+
                 const startYear = 571;
-                rail.style.width = (2030 - startYear) * currentZoom + "px";
+                track.style.width = (2030 - startYear) * currentZoom + "px";
 
                 const occupiedSlots = [];
                 sortedData.forEach(k => {
-                    const xPos = (k.yil - startYear) * currentZoom;
+                    const xPos = (parseInt(k.yil) - startYear) * currentZoom;
                     let level = 0;
                     while (occupiedSlots[level]?.some(r => xPos < r.end && xPos + 220 > r.start)) { level++; }
                     if (!occupiedSlots[level]) occupiedSlots[level] = [];
@@ -160,8 +175,25 @@
                         <div class="time-node"></div>
                         <div class="box-line" style="height:${bottomDist}px; bottom:-${bottomDist}px;"></div>
                     `;
-                    rail.appendChild(box);
+                    track.appendChild(box);
                 });
+
+                // --- HARİTALARI YÜKLEME ---
+                const btnContainer = document.getElementById('map-buttons');
+                const mapImg = document.getElementById('map-display');
+                const placeholder = document.getElementById('map-placeholder');
+
+                data.harita_gorselleri.forEach(gorsel => {
+                    const btn = document.createElement('button');
+                    btn.className = 'map-btn'; btn.innerText = gorsel.baslik;
+                    btn.onclick = () => {
+                        placeholder.style.display = 'none';
+                        mapImg.src = gorsel.url; mapImg.style.display = 'block';
+                        zoom.detach(); zoom.attach(mapImg); // Zoom'u yenile
+                    };
+                    btnContainer.appendChild(btn);
+                });
+
             } catch (e) { console.error(e); }
         }
 

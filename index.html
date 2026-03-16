@@ -10,26 +10,31 @@
         :root { --ana: #0d0d0d; --altin: #c5a059; --kart: #1a1a1a; }
         body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--ana); color: white; scroll-behavior: smooth; }
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1542831371-29b0f74f9713'); background-size: cover; }
-        h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--altin); padding: 0 20px; }
+        h1 { font-family: 'Cinzel', serif; font-size: 2rem; color: var(--altin); }
         .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .nav-link { padding: 12px 25px; border: 1px solid var(--altin); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; background: rgba(0,0,0,0.5); }
-        .section { padding: 80px 20px; max-width: 1000px; margin: 0 auto; min-height: 400px; }
+        .nav-link { padding: 12px; border: 1px solid var(--altin); color: white; text-decoration: none; border-radius: 5px; font-size: 0.8rem; background: rgba(0,0,0,0.5); }
+        .section { padding: 60px 20px; max-width: 1000px; margin: 0 auto; }
         h2 { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; border-bottom: 2px solid var(--altin); padding-bottom: 10px; }
-        #map { height: 400px; border-radius: 10px; border: 1px solid var(--altin); margin-top: 20px; }
+        
+        /* Harita Seçici Tasarımı */
+        .map-selector { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; margin-bottom: 20px; }
+        .map-btn { padding: 8px 15px; background: var(--kart); border: 1px solid var(--altin); color: var(--altin); border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; }
+        .map-btn:hover, .map-btn.active { background: var(--altin); color: var(--ana); }
+        #map-display { width: 100%; border-radius: 10px; border: 1px solid var(--altin); min-height: 300px; display: block; margin-top: 10px; }
+        
         .timeline { border-left: 2px solid var(--altin); padding-left: 20px; margin: 20px 10px; }
         .t-item { margin-bottom: 30px; position: relative; }
-        .t-item::before { content: '●'; position: absolute; left: -29px; color: var(--altin); font-size: 20px; }
-        .t-yil { color: var(--altin); font-weight: bold; font-size: 1.2rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: var(--kart); padding: 25px; border-radius: 10px; border-top: 4px solid var(--altin); }
+        .t-item::before { content: '●'; position: absolute; left: -29px; color: var(--altin); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: var(--kart); padding: 20px; border-radius: 10px; border-top: 4px solid var(--altin); }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <h1 id="main-title">YÜKLENİYOR...</h1>
+        <h1 id="main-title">DİJİTAL RAHLE</h1>
         <div class="nav">
-            <a href="#map-sec" class="nav-link">COĞRAFYA</a>
+            <a href="#map-sec" class="nav-link">HARİTALAR</a>
             <a href="#time-sec" class="nav-link">KRONOLOJİ</a>
             <a href="#sahsiyetler" class="nav-link">ŞAHSİYETLER</a>
             <a href="#kitaplar" class="nav-link">KİTAPLAR</a>
@@ -37,8 +42,11 @@
     </div>
 
     <div id="map-sec" class="section">
-        <h2>DÜŞÜNCE COĞRAFYASI</h2>
-        <div id="map"></div>
+        <h2>DÜŞÜNCE COĞRAFYASI VE HAVZALAR</h2>
+        <div class="map-selector" id="map-buttons">
+            </div>
+        <img id="map-display" src="" alt="Harita Seçiniz" style="display:none;">
+        <div id="interactive-map" style="height: 400px; margin-top: 20px; border-radius: 10px; border: 1px solid var(--altin);"></div>
     </div>
 
     <div id="time-sec" class="section">
@@ -52,59 +60,47 @@
     <script>
         const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
 
-        async function baslat() {
-            try {
-                const res = await fetch(API_URL);
-                const data = await res.json();
+        async function yukle() {
+            const res = await fetch(API_URL);
+            const data = await res.json();
 
-                // 1. Başlık
-                document.getElementById('main-title').innerText = data.site_ayarlari.baslik;
+            document.getElementById('main-title').innerText = data.site_ayarlari.baslik;
 
-                // 2. Harita (Boş kalmaması için)
-                const map = L.map('map').setView([35, 45], 3);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                
-                if(data.harita_noktalari) {
-                    data.harita_noktalari.forEach(n => {
-                        L.marker([n.lat, n.lng]).addTo(map).bindPopup(`<b>${n.ad}</b><br>${n.bilgi}`);
-                    });
-                }
+            // 1. Görsel Harita Seçici
+            const mapBtns = document.getElementById('map-buttons');
+            const mapImg = document.getElementById('map-display');
+            
+            data.harita_gorselleri.forEach((gorsel, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'map-btn';
+                btn.innerText = gorsel.baslik;
+                btn.onclick = () => {
+                    mapImg.src = gorsel.url;
+                    mapImg.style.display = 'block';
+                    document.getElementById('interactive-map').style.display = 'none';
+                };
+                mapBtns.appendChild(btn);
+            });
 
-                // 3. Kronoloji (Boş kalmaması için)
-                const tl = document.getElementById('timeline');
-                if(data.kronoloji) {
-                    data.kronoloji.forEach(k => {
-                        tl.innerHTML += `<div class="t-item"><div class="t-yil">${k.yil}</div><div>${k.olay}</div></div>`;
-                    });
-                }
+            // İlk açılışta interaktif haritayı göster
+            const map = L.map('interactive-map').setView([35, 45], 3);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            data.harita_noktalari.forEach(n => L.marker([n.lat, n.lng]).addTo(map).bindPopup(n.ad));
 
-                // 4. Şahsiyetler ve Kitaplar (ID eşleşmesi için)
-                const dc = document.getElementById('dynamic-content');
-                if(data.kategoriler) {
-                    data.kategoriler.forEach(kat => {
-                        let kartlar = kat.liste.map(i => `
-                            <div class="card">
-                                <h3>${i.ad}</h3>
-                                <p>${i.ozet}</p>
-                            </div>
-                        `).join('');
-                        
-                        dc.innerHTML += `
-                            <div id="${kat.id}" class="section">
-                                <h2>${kat.baslik}</h2>
-                                <div class="grid">${kartlar}</div>
-                            </div>
-                        `;
-                    });
-                }
+            // 2. Kronoloji
+            const tl = document.getElementById('timeline');
+            data.kronoloji.forEach(k => {
+                tl.innerHTML += `<div class="t-item"><b style="color:var(--altin)">${k.yil}</b><br>${k.olay}</div>`;
+            });
 
-            } catch (err) {
-                console.error("Hata:", err);
-                document.getElementById('main-title').innerText = "BAĞLANTI HATASI!";
-            }
+            // 3. Kategoriler
+            const dc = document.getElementById('dynamic-content');
+            data.kategoriler.forEach(kat => {
+                let cards = kat.liste.map(i => `<div class="card"><h3>${i.ad}</h3><p>${i.ozet}</p></div>`).join('');
+                dc.innerHTML += `<div id="${kat.id}" class="section"><h2>${kat.baslik}</h2><div class="grid">${cards}</div></div>`;
+            });
         }
-
-        window.onload = baslat;
+        window.onload = yukle;
     </script>
 </body>
 </html>

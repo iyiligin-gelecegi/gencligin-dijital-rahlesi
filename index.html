@@ -9,11 +9,9 @@
         :root { --ana: #0d0d0d; --altin: #c5a059; --kart: #1a1a1a; }
         body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--ana); color: white; scroll-behavior: smooth; }
         
-        /* Giriş */
         .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1542831371-29b0f74f9713'); background-size: cover; background-position: center; }
         h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; color: var(--altin); padding: 0 20px; }
         
-        /* Menü */
         .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; padding: 0 10px; }
         .nav-link { padding: 10px; border: 1px solid var(--altin); color: white; text-decoration: none; border-radius: 5px; font-size: 0.8rem; text-align: center; background: rgba(0,0,0,0.5); }
 
@@ -21,15 +19,19 @@
         h2 { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; border-bottom: 2px solid var(--altin); padding-bottom: 10px; }
 
         /* Harita Görsel Alanı */
-        .map-selector { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; margin-bottom: 15px; }
+        .map-selector { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; margin-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--altin) transparent; }
         .map-btn { padding: 10px 18px; background: var(--kart); border: 1px solid var(--altin); color: var(--altin); border-radius: 25px; cursor: pointer; white-space: nowrap; font-size: 0.85rem; transition: 0.3s; }
         .map-btn:hover { background: var(--altin); color: var(--ana); }
         
         #map-display-container { width: 100%; border: 1px solid var(--altin); border-radius: 10px; overflow: hidden; background: #000; min-height: 200px; position: relative; }
-        #map-display { width: 100%; display: none; cursor: pointer; }
+        
+        /* Zoom Özelliği İçin Stil */
+        #map-display { width: 100%; display: none; cursor: zoom-in; transition: 0.3s; }
+        .medium-zoom-overlay { background: rgba(0, 0, 0, 0.9) !important; z-index: 1000; }
+        .medium-zoom-image--opened { z-index: 1001; }
+
         .placeholder-text { padding: 50px; text-align: center; color: #555; }
 
-        /* Kronoloji ve Kartlar */
         .timeline { border-left: 2px solid var(--altin); padding-left: 20px; margin: 20px 10px; }
         .t-item { margin-bottom: 30px; position: relative; }
         .t-item::before { content: '●'; position: absolute; left: -29px; color: var(--altin); font-size: 1.2rem; }
@@ -54,7 +56,7 @@
         <h2>DÜŞÜNCE HARİTALARI</h2>
         <div class="map-selector" id="map-buttons"></div>
         <div id="map-display-container">
-            <div id="placeholder" class="placeholder-text">Lütfen yukarıdan bir harita seçiniz.</div>
+            <div id="placeholder" class="placeholder-text">Lütfen yukarıdan bir harita seçiniz (Büyütmek için üzerine tıklayın).</div>
             <img id="map-display" src="" alt="Atlas Haritası">
         </div>
     </div>
@@ -66,16 +68,24 @@
 
     <div id="dynamic-content"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
+
     <script>
-       const API_URL = "https://api.npoint.io/c55382ed5004a784e99b?nocache=" + Math.random();
+        const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
+        
+        // Zoom özelliğini başlat
+        const zoom = mediumZoom('#map-display', {
+            margin: 24,
+            background: '#0d0d0d'
+        });
+
         async function yukle() {
             try {
-                const res = await fetch(API_URL);
+                const res = await fetch(API_URL + "?v=" + Math.random());
                 const data = await res.json();
 
                 document.getElementById('main-title').innerText = data.site_ayarlari.baslik;
 
-                // 1. Harita Butonları ve Görsel Değişimi
                 const btnContainer = document.getElementById('map-buttons');
                 const mapImg = document.getElementById('map-display');
                 const placeholder = document.getElementById('placeholder');
@@ -88,19 +98,19 @@
                         placeholder.style.display = 'none';
                         mapImg.src = gorsel.url;
                         mapImg.style.display = 'block';
-                        // Sayfayı haritaya odakla
+                        // Her resim değiştiğinde zoom özelliğini yenile
+                        zoom.detach();
+                        zoom.attach(mapImg);
                         mapImg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     };
                     btnContainer.appendChild(btn);
                 });
 
-                // 2. Kronoloji
                 const tl = document.getElementById('timeline');
                 data.kronoloji.forEach(k => {
                     tl.innerHTML += `<div class="t-item"><b style="color:var(--altin)">${k.yil}</b><br>${k.olay}</div>`;
                 });
 
-                // 3. Kategoriler (Şahsiyetler, Kitaplar)
                 const dc = document.getElementById('dynamic-content');
                 data.kategoriler.forEach(kat => {
                     let kartlar = kat.liste.map(i => `
@@ -120,7 +130,6 @@
 
             } catch (err) {
                 console.error("Hata:", err);
-                document.getElementById('main-title').innerText = "BAĞLANTI HATASI!";
             }
         }
 

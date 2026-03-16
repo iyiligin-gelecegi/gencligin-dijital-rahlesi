@@ -67,8 +67,7 @@
     <div id="dynamic-content"></div>
 
     <script>
-        const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
-
+       const API_URL = "https://api.npoint.io/c55382ed5004a784e99b?nocache=" + Math.random();
         async function yukle() {
             try {
                 const res = await fetch(API_URL);

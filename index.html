@@ -4,211 +4,240 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gençliğin Dijital Rahlesi | Medeniyet Atlası</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --altin: #c5a059; --ana-koyu: #0a0a0a; --kart-bg: #161616; --navbar-bg: rgba(10,10,10,0.95);
-            --hadise: #3498db; --bilgin: #c5a059; --mimari: #2ecc71; --kurum: #9b59b6;
+            --altin: #c5a059; --ana-koyu: #0d0d0d; --navbar-bg: rgba(13, 13, 13, 0.98);
+            --vurgu: rgba(197, 160, 89, 0.2);
         }
         
         * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: white;
-            line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth;
-            /* === 1. ARKA PLAN (İSTEDİĞİN GÖRSEL VE KARARTMA) === */
-            background: linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.92)), 
+            margin: 0; font-family: 'Poppins', sans-serif; color: #f0f0f0;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
                         url('https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/D691/production/_113592945_gettyimages-629536533.jpg.webp');
-            background-size: cover; background-position: center; background-attachment: fixed; /* Sabit Arka Plan */
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
 
-        /* === 2. YENİ KATEGORİ DÜZENİ (STICKY NAVBAR) === */
+        /* NAVBAR - 5 STRATEJİK KATEGORİ */
         .navbar {
-            position: sticky; top: 0; left: 0; width: 100%;
-            background: var(--navbar-bg); border-bottom: 2px solid var(--altin);
-            padding: 10px 20px; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px;
+            position: sticky; top: 0; width: 100%; background: var(--navbar-bg);
+            border-bottom: 1px solid var(--altin); padding: 15px 0; z-index: 1000;
+            display: flex; justify-content: center; gap: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .nav-link {
-            padding: 8px 15px; border: 1px solid transparent; color: white;
-            text-decoration: none; font-size: 0.75rem; font-weight: 600; text-align: center;
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 1.5px; transition: 0.3s; font-family: 'Cinzel', serif;
         }
-        .nav-link:hover { color: var(--altin); border-color: var(--altin); }
+        .nav-link:hover { color: var(--altin); text-shadow: 0 0 10px var(--altin); }
 
-        /* Hero */
-        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .hero h1 { font-family: 'Cinzel', serif; font-size: 2.8rem; color: var(--altin); margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .hero p { font-size: 1rem; max-width: 600px; color: #ccc; margin: 10px 0; }
+        /* HERO */
+        .hero { height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-family: 'Cinzel', serif; font-size: clamp(2rem, 5vw, 4rem); color: var(--altin); margin-bottom: 10px; }
+        .hero p { font-size: 1.1rem; max-width: 700px; color: #ccc; font-weight: 300; }
 
-        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.2rem; margin: 60px 0 30px; border-bottom: 2px solid var(--altin); display: inline-block; padding-bottom: 10px; text-transform: uppercase; }
-        .center-wrap { text-align: center; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.2rem; margin-bottom: 40px; }
 
-        /* === HARİTALAR BÖLÜMÜ === */
-        .map-selector { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; margin-bottom: 20px; scrollbar-width: thin; scrollbar-color: var(--altin) transparent; justify-content: center; }
-        .map-btn { padding: 10px 18px; background: var(--kart-bg); border: 1px solid var(--altin); color: var(--altin); border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.8rem; font-weight: bold; transition: 0.3s; }
-        .map-btn:hover { background: var(--altin); color: var(--ana-koyu); }
-        #map-display-container { width: 100%; border: 1px solid var(--altin); border-radius: 10px; overflow: hidden; background: #000; min-height: 300px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        #map-display { width: 100%; display: none; cursor: zoom-in; }
+        /* HARİTALAR DÜZENİ */
+        .map-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 30px; padding: 5px; }
+        .map-btn { 
+            padding: 10px 22px; background: rgba(255,255,255,0.05); border: 1px solid var(--altin); 
+            color: var(--altin); border-radius: 4px; cursor: pointer; font-size: 0.85rem; 
+            font-weight: 600; transition: 0.4s; font-family: 'Poppins', sans-serif;
+        }
+        .map-btn:hover, .map-btn.active { background: var(--altin); color: #000; box-shadow: 0 0 20px var(--vurgu); }
+        #map-display-box { border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 8px; overflow: hidden; background: #000; position: relative; min-height: 400px; }
+        #map-img { width: 100%; display: none; transition: transform 0.3s; }
 
-        /* === ZAMAN TÜNELİ ALANI === */
-        .timeline-wrapper { padding-top: 350px; padding-bottom: 100px; background: rgba(10,10,10,0.6); overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin); margin-top: 60px;backdrop-filter: blur(5px); }
-        .timeline-rail { position: relative; height: 4px; background: var(--altin); margin: 0 200px; transition: width 0.4s; }
+        /* KRONOLOJİ NAVİGASYON VE ALAN */
+        .timeline-container { position: relative; background: rgba(0,0,0,0.4); border-radius: 15px; padding: 20px 0; border: 1px solid rgba(197, 160, 89, 0.1); }
+        .scroll-hint { text-align: center; color: var(--altin); font-size: 0.8rem; margin-bottom: 10px; opacity: 0.7; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+
+        .timeline-wrapper { 
+            overflow-x: auto; padding: 300px 0 100px; cursor: grab; position: relative;
+            scrollbar-width: none; /* Firefox */
+        }
+        .timeline-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
         
-        .time-box { position: absolute; width: 220px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; transition: 0.4s; }
-        .box-content { padding: 12px; border-radius: 10px; font-size: 0.8rem; background: rgba(26,26,26,0.9); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px; text-align: center; backdrop-filter: blur(5px); }
-        .box-content.expanded { width: 300px; z-index: 100; border-color: var(--altin); box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
-        .details-text { display: none; font-size: 0.75rem; margin-top: 10px; color: #ccc; text-align: left; line-height: 1.5; }
+        .timeline-rail { position: relative; height: 3px; background: linear-gradient(90deg, transparent, var(--altin), transparent); margin: 0 300px; }
+        
+        /* Kart Tasarımları */
+        .time-box { position: absolute; width: 240px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+        .box-content { 
+            padding: 15px; border-radius: 8px; font-size: 0.85rem; background: #1a1a1a; 
+            border: 1px solid rgba(197, 160, 89, 0.2); text-align: center; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .box-content:hover { border-color: var(--altin); transform: translateY(-5px); }
+        .box-content.expanded { width: 340px; z-index: 100; border-color: var(--altin); }
+        .details-text { display: none; margin-top: 10px; font-size: 0.8rem; color: #bbb; text-align: left; border-top: 1px solid #333; padding-top: 10px; }
         .box-content.expanded .details-text { display: block; }
 
-        .tip-hadise { border-bottom: 4px solid var(--hadise); }
-        .tip-bilgin { border-bottom: 4px solid var(--bilgin); }
-        .tip-mimari { border-bottom: 4px solid var(--mimari); }
-        .tip-kurum  { border-bottom: 4px solid var(--kurum); }
+        /* DİNAMİK KATEGORİ KARTLARI */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 20px; }
+        .info-card { 
+            background: rgba(20, 20, 20, 0.7); border: 1px solid rgba(197, 160, 89, 0.2); 
+            padding: 25px; border-radius: 12px; backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        .info-card:hover { border-color: var(--altin); background: rgba(30, 30, 30, 0.9); }
+        .info-card h3 { font-family: 'Cinzel', serif; color: var(--altin); margin: 0 0 12px; }
+        .info-card p { font-size: 0.9rem; color: #ccc; line-height: 1.6; }
 
-        .time-node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; border: 2px solid var(--altin); }
-        .box-line { position: absolute; left: 50%; width: 1px; background: var(--altin); opacity: 0.3; }
+        .nav-arrows {
+            position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between;
+            padding: 0 20px; pointer-events: none; z-index: 50;
+        }
+        .arrow { 
+            color: var(--altin); font-size: 3rem; opacity: 0.5; pointer-events: auto; cursor: pointer;
+            text-shadow: 0 0 15px #000;
+        }
+        .arrow:hover { opacity: 1; }
 
-        @media (max-width: 700px) { h1 { font-size: 1.8rem; } .navbar { justify-content: center; gap: 5px; } .nav-link { font-size: 0.65rem; padding: 5px 8px; } }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
+    <nav class="navbar">
         <a href="#map-sec" class="nav-link">HARİTALAR</a>
         <a href="#time-sec" class="nav-link">KRONOLOJİ</a>
-        <a href="#dynamic-content" class="nav-link">DÖNEMLER</a>
-        <a href="#dynamic-content" class="nav-link">BİLİMLER</a>
-        <a href="#dynamic-content" class="nav-link">BİLGİNLER</a>
-        <a href="#dynamic-content" class="nav-link">MİMARİ</a>
-        <a href="#dynamic-content" class="nav-link">KİTAPLAR</a>
-    </div>
+        <a href="#sahsiyetler_ve_kitaplar-sec" class="nav-link">BİLGİNLER</a>
+        <a href="#kurumlar-sec" class="nav-link">KURUMLAR</a>
+        <a href="#mimari-sec" class="nav-link">MİMARİ</a>
+    </nav>
 
-    <div class="hero">
-        <h1>GENÇLİĞİN DİJİTAL RAHLESİ</h1>
-        <p>İslam medeniyetinin kadim mirasını, interaktif bir zaman atlasıyla keşfedin.</p>
-    </div>
+    <header class="hero">
+        <h1>MEDENİYET ATLASI</h1>
+        <p>Asr-ı Saadet'ten bugüne, bilginin ve hikmetin izinde bir keşif yolculuğu. Rahleye oturun ve keşfetmeye başlayın.</p>
+    </header>
 
-    <div id="map-sec" style="padding: 40px 20px; max-width: 1100px; margin: 0 auto;">
-        <div class="center-wrap"><h2 class="section-title">MEDENİYET HAVZALARI & HARİTALAR</h2></div>
-        <div class="map-selector" id="map-buttons"></div>
-        <div id="map-display-container">
-            <img id="map-display" src="" alt="Atlas Haritası">
-            <p id="map-placeholder" style="text-align:center; padding:100px; color:#555; font-style:italic;">Lütfen yukarıdan bir harita seçiniz (Büyütmek için üzerine tıklayın).</p>
+    <section id="map-sec" class="container">
+        <h2 class="section-title">Medeniyet Coğrafyası</h2>
+        <div class="map-selector" id="map-btns"></div>
+        <div id="map-display-box">
+            <img id="map-img" src="">
+            <div id="map-hint" style="text-align:center; padding-top:150px; color:#555;">Görüntülemek istediğiniz havzayı yukarıdan seçiniz.</div>
         </div>
-    </div>
+    </section>
 
-    <div id="time-sec">
-        <div class="center-wrap"><h2 class="section-title">MEDENİYET ZAMAN ŞERİDİ (KRONOLOJİ)</h2></div>
-        <div class="timeline-wrapper" id="scroll-area">
-            <div class="timeline-rail" id="rail"></div>
+    <section id="time-sec">
+        <h2 class="section-title">Zamanın Ruhu</h2>
+        <div class="scroll-hint">← SAĞA VE SOLA KAYDIRIN →</div>
+        <div class="timeline-container">
+            <div class="nav-arrows">
+                <div class="arrow" onclick="scrollTimeline(-500)">‹</div>
+                <div class="arrow" onclick="scrollTimeline(500)">›</div>
+            </div>
+            <div class="timeline-wrapper" id="scroll-area">
+                <div class="timeline-rail" id="rail"></div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div id="dynamic-content"></div>
+    <div id="dynamic-sections" class="container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
     <script>
         const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
-        let currentZoom = 30;
-        const zoom = mediumZoom('#map-display', { background: '#0a0a0a' });
 
-        async function yukle() {
+        async function init() {
             try {
                 const res = await fetch(API_URL + "?v=" + Math.random());
                 const data = await res.json();
                 
-                // --- KRONOLOJİ İŞLEME VE EFENDİMİZ'İN (SAV) DOĞUMUNU EKLEME ---
-                const track = document.getElementById('rail');
-                
-                // Verileri (hadise, bilgin, mimari, kurum) birleştirme
-                let combined = data.kronoloji.map(k => ({yil: k.yil, olay: k.olay, ozet: k.olay, tip: "hadise"}));
-                data.kategoriler.forEach(kat => {
-                    kat.liste.forEach(item => {
-                        let yilMatch = item.ad.match(/\d+/);
-                        if(yilMatch) {
-                            combined.push({
-                                yil: parseInt(yilMatch[0]),
-                                olay: item.ad.split('(')[0].trim(),
-                                ozet: item.ozet,
-                                tip: kat.id.replace('sahsiyetler', 'bilgin').replace('mimari', 'mimari').replace('kurumlar', 'kurum')
-                            });
-                        }
-                    });
+                // 1. Haritalar
+                const mBtns = document.getElementById('map-btns');
+                const mImg = document.getElementById('map-img');
+                const mHint = document.getElementById('map-hint');
+                const mZoom = mediumZoom('#map-img', { background: '#000' });
+
+                data.harita_gorselleri.forEach((m, i) => {
+                    const b = document.createElement('button');
+                    b.className = 'map-btn'; b.innerText = m.baslik;
+                    b.onclick = () => {
+                        document.querySelectorAll('.map-btn').forEach(btn => btn.classList.remove('active'));
+                        b.classList.add('active');
+                        mHint.style.display = 'none';
+                        mImg.src = m.url; mImg.style.display = 'block';
+                        mZoom.detach(); mZoom.attach(mImg);
+                    };
+                    mBtns.appendChild(b);
                 });
 
-                // Veriyi yıla göre sırala
-                let sortedData = combined.sort((a,b) => parseInt(a.yil) - parseInt(b.yil));
-
-                // === EFENDİMİZ (SAV) OTOMATİK EKLEME (Eğer en başta yoksa) ===
-                if(sortedData.length === 0 || parseInt(sortedData[0].yil) !== 571) {
-                    sortedData.unshift({
-                        yil: 571,
-                        olay: "Hz. Muhammed (SAV) Efendimizin Dünyaya Teşrifleri",
-                        ozet: "Peygamber Efendimizin (SAV) Mekke-i Mükerreme'de dünyaya gelmesiyle karanlıklar aydınlanmaya başladı.",
-                        tip: "hadise"
-                    });
-                }
-
+                // 2. Kronoloji
+                const rail = document.getElementById('rail');
                 const startYear = 571;
-                track.style.width = (2030 - startYear) * currentZoom + "px";
+                const zoomFactor = 40;
+                rail.style.width = (2030 - startYear) * zoomFactor + "px";
 
-                const occupiedSlots = [];
-                sortedData.forEach(k => {
-                    const xPos = (parseInt(k.yil) - startYear) * currentZoom;
-                    let level = 0;
-                    while (occupiedSlots[level]?.some(r => xPos < r.end && xPos + 220 > r.start)) { level++; }
-                    if (!occupiedSlots[level]) occupiedSlots[level] = [];
-                    occupiedSlots[level].push({ start: xPos, end: xPos + 220 });
+                let events = data.kronoloji.map(k => ({...k, tip: 'hadise'}));
+                data.kategoriler.forEach(kat => {
+                    kat.liste.forEach(item => {
+                        let y = item.ad.match(/\d{3,4}/);
+                        if(y) events.push({yil: parseInt(y[0]), olay: item.ad.split('(')[0], ozet: item.ozet, tip: kat.id});
+                    });
+                });
+                events.sort((a,b) => a.yil - b.yil);
 
-                    const bottomDist = 40 + (level * 100);
+                const slots = [];
+                events.forEach(e => {
+                    const x = (e.yil - startYear) * zoomFactor;
+                    let lvl = 0;
+                    while(slots[lvl]?.some(r => x < r.e && x + 250 > r.s)) lvl++;
+                    if(!slots[lvl]) slots[lvl] = [];
+                    slots[lvl].push({s: x, e: x + 250});
+
+                    const h = 40 + (lvl * 110);
                     const box = document.createElement('div');
-                    box.className = 'time-box';
-                    box.style.left = xPos + "px";
-                    box.style.bottom = bottomDist + "px";
-
+                    box.className = 'time-box'; box.style.left = x + "px"; box.style.bottom = h + "px";
                     box.innerHTML = `
-                        <div class="box-content tip-${k.tip}" onclick="this.classList.toggle('expanded')">
-                            <span style="font-weight:bold; color:var(--altin); font-family:'Cinzel';">${k.yil}</span><br>
-                            <strong>${k.olay}</strong>
-                            <div class="details-text">${k.ozet}</div>
+                        <div class="box-content" onclick="this.classList.toggle('expanded')">
+                            <span style="color:var(--altin); font-weight:bold; font-size:1rem;">${e.yil}</span><br>
+                            <strong style="display:block; margin:5px 0;">${e.olay}</strong>
+                            <div class="details-text">${e.ozet}</div>
                         </div>
-                        <div class="time-node"></div>
-                        <div class="box-line" style="height:${bottomDist}px; bottom:-${bottomDist}px;"></div>
+                        <div style="position:absolute; bottom:-${h}px; width:10px; height:10px; background:var(--altin); border-radius:50%; left:50%; transform:translateX(-50%);"></div>
+                        <div style="position:absolute; bottom:-${h}px; left:50%; width:1px; height:${h}px; background:var(--altin); opacity:0.3;"></div>
                     `;
                     rail.appendChild(box);
                 });
 
-                // --- HARİTALARI YÜKLEME (JSON LİNKLERİ) ---
-                const btnContainer = document.getElementById('map-buttons');
-                const mapImg = document.getElementById('map-display');
-                const placeholder = document.getElementById('map-placeholder');
-
-                if(data.harita_gorselleri && data.harita_gorselleri.length > 0) {
-                    data.harita_gorselleri.forEach(gorsel => {
-                        const btn = document.createElement('button');
-                        btn.className = 'map-btn'; btn.innerText = gorsel.baslik;
-                        btn.onclick = () => {
-                            placeholder.style.display = 'none';
-                            mapImg.src = gorsel.url; mapImg.style.display = 'block';
-                            zoom.detach(); zoom.attach(mapImg); // Zoom'u yenile
-                        };
-                        btnContainer.appendChild(btn);
+                // 3. Kategoriler (Kronolojiye atmayan, kendi yerinde duran kartlar)
+                const dynArea = document.getElementById('dynamic-sections');
+                data.kategoriler.forEach(kat => {
+                    const sec = document.createElement('section');
+                    sec.id = kat.id + "-sec";
+                    sec.style.paddingTop = "80px";
+                    sec.innerHTML = `<h2 class="section-title">${kat.baslik}</h2><div class="card-grid"></div>`;
+                    const grid = sec.querySelector('.card-grid');
+                    kat.liste.forEach(item => {
+                        grid.innerHTML += `<div class="info-card"><h3>${item.ad}</h3><p>${item.ozet}</p></div>`;
                     });
-                } else {
-                    placeholder.innerText = "JSON dosyasında harita verisi bulunamadı.";
-                }
+                    dynArea.appendChild(sec);
+                });
 
-            } catch (e) { console.error("Yükleme hatası:", e); }
+            } catch (err) { console.error("Hata:", err); }
         }
 
-        // Yatay Kaydırma (Kronoloji İçin)
-        const slider = document.getElementById('scroll-area');
-        let isDown = false, startX, scrollLeft;
-        slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-        slider.addEventListener('mouseup', () => isDown = false);
-        slider.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); slider.scrollLeft = scrollLeft - (e.pageX - startX) * 2; });
+        // Kronoloji Kaydırma Fonksiyonları
+        const scrollArea = document.getElementById('scroll-area');
+        function scrollTimeline(val) { scrollArea.scrollBy({ left: val, behavior: 'smooth' }); }
 
-        window.onload = yukle;
+        let isDown = false, startX, scrollLeft;
+        scrollArea.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - scrollArea.offsetLeft; scrollLeft = scrollArea.scrollLeft; });
+        scrollArea.addEventListener('mouseleave', () => isDown = false);
+        scrollArea.addEventListener('mouseup', () => isDown = false);
+        scrollArea.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - scrollArea.offsetLeft;
+            const walk = (x - startX) * 2;
+            scrollArea.scrollLeft = scrollLeft - walk;
+        });
+
+        init();
     </script>
 </body>
 </html>

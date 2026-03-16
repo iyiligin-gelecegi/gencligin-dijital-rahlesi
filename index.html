@@ -3,119 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dijital Rahle | Medeniyet Atlası</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Gençliğin Dijital Rahlesi | Medeniyet Atlası</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --ana: #0a0a0a; --altin: #c5a059;
-            --hadise-bg: #2c3e50; --bilgin-bg: #4b4b4b; --mimari-bg: #1e3d33; --kurum-bg: #3d3d5e;
+            --altin: #c5a059; --ana-koyu: #0a0a0a; --kart-bg: #161616;
+            --hadise: #3498db; --bilgin: #c5a059; --mimari: #2ecc71; --kurum: #9b59b6;
         }
         
+        * { box-sizing: border-box; }
         body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: white;
-            background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.96)), 
-                        url('https://png.pngtree.com/thumb_back/fw800/background/20250915/pngtree-ornate-islamic-architectural-masterpiece-image_19365187.webp');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            overflow-x: hidden;
+            margin: 0; font-family: 'Poppins', sans-serif; color: white; background-color: var(--ana-koyu);
+            line-height: 1.6; overflow-x: hidden;
         }
 
-        .timeline-controls {
-            position: sticky; left: 50%; transform: translateX(-50%); top: 20px; z-index: 100;
-            display: flex; gap: 15px; padding: 10px 20px; background: rgba(10,10,10,0.9);
-            border: 1px solid var(--altin); border-radius: 50px; width: fit-content;
+        /* === ANA SAYFA GİRİŞ (HERO) === */
+        .hero {
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1920&q=80'); /* İslam Mimarisi Görseli */
+            background-size: cover; background-position: center; text-align: center; padding: 20px;
         }
-        .zoom-btn { background: var(--altin); border: none; width: 35px; height: 35px; cursor: pointer; border-radius: 50%; font-size: 1.2rem; }
 
+        .hero h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--altin); margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .hero p { font-size: 1.2rem; max-width: 700px; color: #ddd; margin: 20px 0; }
+        
+        .scroll-down { margin-top: 50px; font-size: 0.9rem; color: var(--altin); animation: bounce 2s infinite; }
+
+        /* === HIZLI ERİŞİM PORTALI === */
+        .portal-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; width: 100%; max-width: 1100px; margin-top: 40px;
+        }
+        .portal-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(197, 160, 89, 0.3);
+            padding: 30px; border-radius: 15px; text-decoration: none; color: white;
+            transition: 0.3s; text-align: center; backdrop-filter: blur(10px);
+        }
+        .portal-card:hover { background: var(--altin); color: var(--ana-koyu); transform: translateY(-10px); }
+        .portal-card h3 { font-family: 'Cinzel', serif; margin-bottom: 10px; }
+
+        /* === ZAMAN TÜNELİ ALANI (ESKİ MEKANİK KORUNDU) === */
+        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.5rem; margin: 80px 0 40px; }
+        
         .timeline-wrapper {
-            padding-top: 450px; padding-bottom: 150px;
-            background: rgba(255,255,255,0.02); overflow-x: auto; cursor: grab; position: relative;
+            padding-top: 350px; padding-bottom: 100px; background: #0d0d0d;
+            overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin);
         }
-
-        .timeline-rail { position: relative; height: 4px; background: var(--altin); margin: 0 200px; transition: width 0.4s; }
-
-        .time-box {
-            position: absolute; width: 220px; transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center; z-index: 5;
-            transition: all 0.4s ease;
+        .timeline-rail { position: relative; height: 4px; background: var(--altin); margin: 0 200px; }
+        
+        .time-box { position: absolute; width: 220px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; transition: 0.4s; }
+        .box-content { 
+            padding: 12px; border-radius: 10px; font-size: 0.8rem; background: #1a1a1a; 
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px;
         }
-
-        /* === TIKLANABİLİR İÇERİK KUTUSU === */
-        .box-content {
-            padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6); position: relative;
-            text-align: center; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; overflow: hidden; max-height: 80px; /* Kapalıyken yükseklik */
-            transition: max-height 0.5s ease, width 0.3s ease;
-            width: 200px;
-        }
-
-        /* Tıklanınca açılan hal */
-        .box-content.expanded {
-            max-height: 500px; /* İçeriğe göre genişler */
-            width: 280px; 
-            z-index: 100;
-            box-shadow: 0 0 30px rgba(197, 160, 89, 0.5);
-        }
-
-        .details-text {
-            display: none; margin-top: 10px; padding-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.75rem; color: #eee; line-height: 1.5;
-            text-align: left;
-        }
-
+        .box-content.expanded { width: 300px; z-index: 100; border-color: var(--altin); }
+        .details-text { display: none; font-size: 0.75rem; margin-top: 10px; color: #ccc; }
         .box-content.expanded .details-text { display: block; }
 
-        /* Kategori Renkleri */
-        .tip-hadise { background: var(--hadise-bg); border-bottom: 3px solid #3498db; }
-        .tip-bilgin { background: var(--bilgin-bg); border-bottom: 3px solid var(--altin); }
-        .tip-mimari { background: var(--mimari-bg); border-bottom: 3px solid #2ecc71; }
-        .tip-kurum  { background: var(--kurum-bg); border-bottom: 3px solid #9b59b6; }
+        /* Renkler */
+        .tip-hadise { border-bottom: 4px solid var(--hadise); }
+        .tip-bilgin { border-bottom: 4px solid var(--bilgin); }
+        .tip-mimari { border-bottom: 4px solid var(--mimari); }
+        .tip-kurum  { border-bottom: 4px solid var(--kurum); }
 
-        .box-line { position: absolute; left: 50%; width: 1px; background: var(--altin); opacity: 0.3; pointer-events: none; }
-        .time-node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #fff; border: 2px solid var(--altin); border-radius: 50%; }
-        .box-year { font-weight: bold; font-family: 'Cinzel'; display: block; color: var(--altin); }
+        .time-node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; border: 2px solid var(--altin); }
+        .box-line { position: absolute; left: 50%; width: 1px; background: var(--altin); opacity: 0.3; }
 
-        .hero { padding: 40px; text-align: center; }
-        h1 { font-family: 'Cinzel', serif; color: var(--altin); }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <h1 id="main-title">DİJİTAL RAHLE</h1>
-        <p style="color:#888;">Başlıklara tıklayarak detaylı bilgiyi görebilirsiniz.</p>
+        <h1>GENÇLİĞİN DİJİTAL RAHLESİ</h1>
+        <p>İslam düşünce geleneğini, kadim bilginleri ve muazzam eserleri keşfedebileceğiniz dijital bir yolculuk.</p>
+        
+        <div class="portal-grid">
+            <a href="#time-sec" class="portal-card">
+                <h3>ZAMAN ATLASI</h3>
+                <p>571'den günümüze interaktif kronoloji.</p>
+            </a>
+            <a href="#map-sec" class="portal-card">
+                <h3>DÜŞÜNCE HARİTALARI</h3>
+                <p>İlim havzaları ve coğrafi dağılım.</p>
+            </a>
+            <a href="#dynamic-content" class="portal-card">
+                <h3>KÜTÜPHANE</h3>
+                <p>Bilginler ve eserler kataloğu.</p>
+            </a>
+        </div>
+        
+        <div class="scroll-down">Aşağı Kaydır ▼</div>
     </div>
 
-    <div class="timeline-controls">
-        <button class="zoom-btn" onclick="adjustZoom(1.4)">+</button>
-        <button class="zoom-btn" onclick="adjustZoom(0.7)">-</button>
+    <div id="time-sec">
+        <h2 class="section-title">MEDENİYET ZAMAN ŞERİDİ</h2>
+        <div class="timeline-wrapper" id="scroll-area">
+            <div class="timeline-rail" id="rail"></div>
+        </div>
     </div>
 
-    <div class="timeline-wrapper" id="scroll-area">
-        <div class="timeline-rail" id="rail"></div>
-    </div>
+    <div id="dynamic-content"></div>
 
     <script>
         const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
         let currentZoom = 30;
-        let timelineData = [];
 
         async function yukle() {
             try {
                 const res = await fetch(API_URL + "?v=" + Math.random());
                 const data = await res.json();
                 
-                // Verileri (hadise, bilgin, mimari, kurum) birleştirme ve özetlerini ekleme
+                // Veri birleştirme mantığı (Aynı kalıyor)
                 let combined = data.kronoloji.map(k => ({yil: k.yil, olay: k.olay, ozet: k.olay, tip: "hadise"}));
-                
                 data.kategoriler.forEach(kat => {
                     kat.liste.forEach(item => {
                         let yilMatch = item.ad.match(/\d+/);
                         if(yilMatch) {
                             combined.push({
                                 yil: parseInt(yilMatch[0]),
-                                olay: item.ad.split('(')[0].trim(), // İsmi temizle
+                                olay: item.ad.split('(')[0].trim(),
                                 ozet: item.ozet,
                                 tip: kat.id.replace('sahsiyetler', 'bilgin').replace('mimari', 'mimari').replace('kurumlar', 'kurum')
                             });
@@ -123,77 +132,45 @@
                     });
                 });
 
-                timelineData = combined.sort((a,b) => a.yil - b.yil);
-                renderTimeline();
+                const sortedData = combined.sort((a,b) => a.yil - b.yil);
+                const rail = document.getElementById('rail');
+                const startYear = 571;
+                rail.style.width = (2030 - startYear) * currentZoom + "px";
+
+                const occupiedSlots = [];
+                sortedData.forEach(k => {
+                    const xPos = (k.yil - startYear) * currentZoom;
+                    let level = 0;
+                    while (occupiedSlots[level]?.some(r => xPos < r.end && xPos + 220 > r.start)) { level++; }
+                    if (!occupiedSlots[level]) occupiedSlots[level] = [];
+                    occupiedSlots[level].push({ start: xPos, end: xPos + 220 });
+
+                    const bottomDist = 40 + (level * 100);
+                    const box = document.createElement('div');
+                    box.className = 'time-box';
+                    box.style.left = xPos + "px";
+                    box.style.bottom = bottomDist + "px";
+
+                    box.innerHTML = `
+                        <div class="box-content tip-${k.tip}" onclick="this.classList.toggle('expanded')">
+                            <span style="font-weight:bold; color:var(--altin);">${k.yil}</span><br>
+                            <strong>${k.olay}</strong>
+                            <div class="details-text">${k.ozet}</div>
+                        </div>
+                        <div class="time-node"></div>
+                        <div class="box-line" style="height:${bottomDist}px; bottom:-${bottomDist}px;"></div>
+                    `;
+                    rail.appendChild(box);
+                });
             } catch (e) { console.error(e); }
         }
 
-        function renderTimeline() {
-            const rail = document.getElementById('rail');
-            rail.innerHTML = '';
-            const startYear = 571;
-            rail.style.width = (2030 - startYear) * currentZoom + "px";
-
-            const occupiedSlots = [];
-
-            timelineData.forEach(k => {
-                const xPos = (k.yil - startYear) * currentZoom;
-                const boxWidth = 220; 
-
-                let level = 0;
-                let foundSlot = false;
-                while (!foundSlot) {
-                    const isOverlap = occupiedSlots[level]?.some(r => xPos < r.end && xPos + boxWidth > r.start);
-                    if (!isOverlap) {
-                        if (!occupiedSlots[level]) occupiedSlots[level] = [];
-                        occupiedSlots[level].push({ start: xPos, end: xPos + boxWidth });
-                        foundSlot = true;
-                    } else { level++; }
-                }
-
-                const bottomDist = 40 + (level * 100);
-                const box = document.createElement('div');
-                box.className = 'time-box';
-                box.style.left = xPos + "px";
-                box.style.bottom = bottomDist + "px";
-
-                box.innerHTML = `
-                    <div class="box-content tip-${k.tip}" onclick="toggleExpand(this)">
-                        <span class="box-year">${k.yil}</span>
-                        <span class="box-title">${k.olay}</span>
-                        <div class="details-text">${k.ozet}</div>
-                    </div>
-                    <div class="time-node"></div>
-                    <div class="box-line" style="height: ${bottomDist}px; bottom: -${bottomDist}px;"></div>
-                `;
-                rail.appendChild(box);
-            });
-        }
-
-        function toggleExpand(el) {
-            // Diğer tüm açık kutuları kapat (isteğe bağlı)
-            document.querySelectorAll('.box-content.expanded').forEach(openBox => {
-                if(openBox !== el) openBox.classList.remove('expanded');
-            });
-            // Tıklananı aç/kapat
-            el.classList.toggle('expanded');
-        }
-
-        function adjustZoom(f) {
-            currentZoom *= f;
-            currentZoom = Math.min(Math.max(currentZoom, 10), 300);
-            renderTimeline();
-        }
-
+        // Yatay Kaydırma
         const slider = document.getElementById('scroll-area');
         let isDown = false, startX, scrollLeft;
         slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
         slider.addEventListener('mouseup', () => isDown = false);
-        slider.addEventListener('mousemove', (e) => { 
-            if(!isDown) return; 
-            e.preventDefault();
-            slider.scrollLeft = scrollLeft - (e.pageX - startX) * 2; 
-        });
+        slider.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); slider.scrollLeft = scrollLeft - (e.pageX - startX) * 2; });
 
         window.onload = yukle;
     </script>

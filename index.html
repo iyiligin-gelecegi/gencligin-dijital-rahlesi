@@ -4,47 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gençliğin Dijital Rahlesi | Medeniyet Atlası</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --altin: #c5a059; --ana-koyu: #0a0a0a; --kart-bg: #161616;
+            --altin: #c5a059; --ana-koyu: #0a0a0a; --kart-bg: #161616; --navbar-bg: rgba(10,10,10,0.95);
             --hadise: #3498db; --bilgin: #c5a059; --mimari: #2ecc71; --kurum: #9b59b6;
         }
         
         * { box-sizing: border-box; }
         body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: white; background-color: var(--ana-koyu);
+            margin: 0; font-family: 'Poppins', sans-serif; color: white;
             line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth;
+            /* === 1. ARKA PLAN (İSTEDİĞİN GÖRSEL VE KARARTMA) === */
+            background: linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.92)), 
+                        url('https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/D691/production/_113592945_gettyimages-629536533.jpg.webp');
+            background-size: cover; background-position: center; background-attachment: fixed; /* Sabit Arka Plan */
         }
 
-        /* === HERO SECTION (ESKİ SADE DÜZEN) === */
-        .hero {
-            height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
-                        url('https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover; background-position: center; text-align: center; padding: 20px;
-            position: relative;
+        /* === 2. YENİ KATEGORİ DÜZENİ (STICKY NAVBAR) === */
+        .navbar {
+            position: sticky; top: 0; left: 0; width: 100%;
+            background: var(--navbar-bg); border-bottom: 2px solid var(--altin);
+            padding: 10px 20px; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px;
         }
-
-        /* Arka Plan Filigran Logo (Hafifçe Yedirilmiş) */
-        .hero::before {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s');
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            opacity: 0.02; z-index: 1; pointer-events: none;
+        .nav-link {
+            padding: 8px 15px; border: 1px solid transparent; color: white;
+            text-decoration: none; font-size: 0.75rem; font-weight: 600; text-align: center;
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
+        .nav-link:hover { color: var(--altin); border-color: var(--altin); }
 
-        .hero * { z-index: 2; }
+        /* Hero */
+        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
         .hero h1 { font-family: 'Cinzel', serif; font-size: 2.8rem; color: var(--altin); margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .hero p { font-size: 1.1rem; max-width: 650px; color: #ccc; margin: 15px 0 40px; }
-        
-        /* === ANA SAYFA KATEGORİ BUTONLARI (ESKİ DÜZEN) === */
-        .nav-bar { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; max-width: 800px; width: 100%; }
-        .nav-btn { padding: 12px 24px; border: 1px solid var(--altin); color: white; text-decoration: none; font-size: 0.85rem; background: rgba(0,0,0,0.6); font-weight: bold; border-radius: 5px; text-align: center; transition: 0.3s; }
-        .nav-btn:hover { background: var(--altin); color: var(--ana-koyu); transform: translateY(-3px); }
+        .hero p { font-size: 1rem; max-width: 600px; color: #ccc; margin: 10px 0; }
 
-        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.2rem; margin: 60px 0 30px; border-bottom: 2px solid var(--altin); display: inline-block; padding-bottom: 10px; }
+        .section-title { font-family: 'Cinzel', serif; text-align: center; color: var(--altin); font-size: 2.2rem; margin: 60px 0 30px; border-bottom: 2px solid var(--altin); display: inline-block; padding-bottom: 10px; text-transform: uppercase; }
         .center-wrap { text-align: center; }
 
         /* === HARİTALAR BÖLÜMÜ === */
@@ -55,11 +51,11 @@
         #map-display { width: 100%; display: none; cursor: zoom-in; }
 
         /* === ZAMAN TÜNELİ ALANI === */
-        .timeline-wrapper { padding-top: 350px; padding-bottom: 100px; background: #0d0d0d; overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin); margin-top: 60px; }
+        .timeline-wrapper { padding-top: 350px; padding-bottom: 100px; background: rgba(10,10,10,0.6); overflow-x: auto; cursor: grab; position: relative; border-top: 1px solid var(--altin); margin-top: 60px;backdrop-filter: blur(5px); }
         .timeline-rail { position: relative; height: 4px; background: var(--altin); margin: 0 200px; transition: width 0.4s; }
         
         .time-box { position: absolute; width: 220px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 5; transition: 0.4s; }
-        .box-content { padding: 12px; border-radius: 10px; font-size: 0.8rem; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px; text-align: center; }
+        .box-content { padding: 12px; border-radius: 10px; font-size: 0.8rem; background: rgba(26,26,26,0.9); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; width: 210px; text-align: center; backdrop-filter: blur(5px); }
         .box-content.expanded { width: 300px; z-index: 100; border-color: var(--altin); box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
         .details-text { display: none; font-size: 0.75rem; margin-top: 10px; color: #ccc; text-align: left; line-height: 1.5; }
         .box-content.expanded .details-text { display: block; }
@@ -72,21 +68,24 @@
         .time-node { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; border: 2px solid var(--altin); }
         .box-line { position: absolute; left: 50%; width: 1px; background: var(--altin); opacity: 0.3; }
 
-        @media (max-width: 700px) { h1 { font-size: 1.8rem; } .nav-bar { flex-direction: column; gap: 10px; } .nav-btn { width: 100%; } }
+        @media (max-width: 700px) { h1 { font-size: 1.8rem; } .navbar { justify-content: center; gap: 5px; } .nav-link { font-size: 0.65rem; padding: 5px 8px; } }
     </style>
 </head>
 <body>
 
+    <div class="navbar">
+        <a href="#map-sec" class="nav-link">HARİTALAR</a>
+        <a href="#time-sec" class="nav-link">KRONOLOJİ</a>
+        <a href="#dynamic-content" class="nav-link">DÖNEMLER</a>
+        <a href="#dynamic-content" class="nav-link">BİLİMLER</a>
+        <a href="#dynamic-content" class="nav-link">BİLGİNLER</a>
+        <a href="#dynamic-content" class="nav-link">MİMARİ</a>
+        <a href="#dynamic-content" class="nav-link">KİTAPLAR</a>
+    </div>
+
     <div class="hero">
         <h1>GENÇLİĞİN DİJİTAL RAHLESİ</h1>
-        <p>İslam medeniyetinin düşünce atlasını, bilginlerini ve eserlerini interaktif bir zaman tüneliyle keşfedin.</p>
-        
-        <div class="nav-bar">
-            <a href="#map-sec" class="nav-btn">HARİTALAR</a>
-            <a href="#time-sec" class="nav-btn">KRONOLOJİ</a>
-            <a href="#dynamic-content" class="nav-btn">BİLGİNLER</a>
-            <a href="#mimari" class="nav-btn">MİMARİ</a>
-        </div>
+        <p>İslam medeniyetinin kadim mirasını, interaktif bir zaman atlasıyla keşfedin.</p>
     </div>
 
     <div id="map-sec" style="padding: 40px 20px; max-width: 1100px; margin: 0 auto;">
@@ -104,6 +103,8 @@
             <div class="timeline-rail" id="rail"></div>
         </div>
     </div>
+
+    <div id="dynamic-content"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
     <script>
@@ -174,7 +175,7 @@
                         <div class="time-node"></div>
                         <div class="box-line" style="height:${bottomDist}px; bottom:-${bottomDist}px;"></div>
                     `;
-                    track.appendChild(box);
+                    rail.appendChild(box);
                 });
 
                 // --- HARİTALARI YÜKLEME (JSON LİNKLERİ) ---

@@ -4,216 +4,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Medeniyet Atlası | Dijital Rahle</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --altin: #c5a059; --ana-koyu: #0d0d0d; --navbar-bg: rgba(13, 13, 13, 0.98);
-            --vurgu: rgba(197, 160, 89, 0.2); --text: #f0f0f0; --kart-bg: #1a1a1a;
+            --altin: #c5a059; --bg: #0d0d0d; --kart: #1a1a1a; --text: #f0f0f0; --vurgu: rgba(197, 160, 89, 0.2);
         }
-        
         body.light-mode {
-            --ana-koyu: #fdfdfd; --navbar-bg: rgba(253, 253, 253, 0.98);
-            --text: #1a1a1a; --kart-bg: #fff;
+            --bg: #fdfdfd; --kart: #ffffff; --text: #1a1a1a;
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            margin: 0; font-family: 'Poppins', sans-serif; color: var(--text); background-color: var(--ana-koyu);
-            overflow-x: hidden; transition: background 0.3s;
+            margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text);
+            transition: 0.3s; overflow-x: hidden;
         }
 
-        /* === NAVBAR MOBİL OPTİMİZASYONU === */
+        /* NAVBAR & LOGO */
         .header-container {
-            position: sticky; top: 0; width: 100%; background: var(--navbar-bg);
-            border-bottom: 1px solid var(--altin); padding: 8px 10px; z-index: 1000;
+            position: sticky; top: 0; z-index: 1000; background: var(--bg);
+            border-bottom: 1px solid var(--altin); padding: 10px;
             display: flex; align-items: center; justify-content: space-between;
         }
-        .brand-box { display: flex; align-items: center; gap: 8px; }
-        .site-logo { width: 35px; height: 35px; object-fit: contain; }
-        .site-title { font-family: 'Cinzel', serif; color: var(--altin); font-size: 0.8rem; margin: 0; }
+        .brand { display: flex; align-items: center; gap: 8px; }
+        .logo { width: 35px; height: 35px; }
+        .title { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--altin); margin: 0; }
+
+        /* ARAMA VE TEMA */
+        .top-tools { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--vurgu); }
+        .search-box { flex: 1; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--altin); background: var(--kart); color: var(--text); font-size: 14px; }
+
+        /* HARİTALAR - MOBİL UYUMLU */
+        .section { padding: 20px 15px; }
+        .sec-title { font-family: 'Cinzel', serif; color: var(--altin); text-align: center; font-size: 1.4rem; margin-bottom: 15px; }
         
-        .navbar { display: none; } /* Mobilde ana kategorileri gizleyip buton yapabiliriz ama şimdilik kalsın diyorsan aşağıda medya sorgusuyla açacağız */
-        @media (min-width: 768px) {
-            .navbar { display: flex; gap: 15px; }
-            .site-title { font-size: 1.1rem; }
-            .site-logo { width: 45px; height: 45px; }
+        .map-btns { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 15px; }
+        .map-btn { 
+            padding: 6px 12px; font-size: 12px; border: 1px solid var(--altin); 
+            background: none; color: var(--altin); border-radius: 4px; cursor: pointer;
         }
+        .map-btn.active { background: var(--altin); color: #000; }
+        #map-viewer { border: 1px solid var(--vurgu); border-radius: 8px; overflow: hidden; background: #000; min-height: 200px; position: relative; }
+        #map-img { width: 100%; display: none; }
 
-        /* === HERO === */
-        .hero { 
-            padding: 40px 20px; text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/D691/production/_113592945_gettyimages-629536533.jpg.webp');
-            background-size: cover; background-position: center;
+        /* KRONOLOJİ - MOBİL CANAVARI */
+        .timeline-area { 
+            position: relative; background: rgba(0,0,0,0.05); padding: 40px 0; 
+            margin: 20px 0; border-y: 1px solid var(--vurgu); overflow: hidden;
         }
-        .hero h1 { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--altin); margin: 0; }
-        .hero p { font-size: 0.95rem; color: #ddd; margin-top: 10px; }
-
-        /* === ARAMA KUTUSU === */
-        .search-container { padding: 15px; text-align: center; }
-        .search-input { 
-            width: 100%; max-width: 500px; padding: 12px 20px; border: 2px solid var(--altin); 
-            border-radius: 25px; background: var(--kart-bg); color: var(--text); font-size: 1rem;
-        }
-
-        /* === KRONOLOJİ MOBİL DÜZENİ (BURASI KRİTİK) === */
-        #time-sec { background: rgba(0,0,0,0.1); padding: 20px 0; }
-        .timeline-container { position: relative; min-height: 450px; overflow: hidden; }
         .timeline-wrapper { 
-            overflow-x: auto; height: 100%; padding: 20px 0 60px;
+            overflow-x: auto; cursor: grab; padding-bottom: 50px;
             scrollbar-width: none; -webkit-overflow-scrolling: touch;
         }
-        .timeline-rail { position: absolute; bottom: 40px; height: 4px; background: var(--altin); }
-        
-        .time-box { 
-            position: absolute; width: 160px; /* Mobilde daha dar kartlar */
-            transition: all 0.3s;
-        }
-        .box-content { 
-            padding: 12px; border-radius: 10px; background: var(--kart-bg);
-            border: 1px solid var(--altin); font-size: 0.9rem; /* Yazılar büyüdü */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .box-content strong { display: block; margin-top: 5px; font-size: 0.95rem; line-height: 1.2; }
-        .details-text { font-size: 0.85rem; margin-top: 8px; display: none; border-top: 1px dashed var(--altin); padding-top: 8px; }
-        .expanded .details-text { display: block; }
+        .timeline-wrapper::-webkit-scrollbar { display: none; }
+        .timeline-rail { position: relative; height: 4px; background: var(--altin); margin-top: 250px; } /* Mobilde kartlar rayın üstünde */
 
-        /* === KATEGORİ KARTLARI === */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+        .time-box { position: absolute; width: 150px; transform: translateX(-50%); text-align: center; }
+        .time-content { 
+            background: var(--kart); border: 1px solid var(--altin); padding: 10px; 
+            border-radius: 8px; font-size: 13px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .time-content strong { display: block; font-size: 14px; margin: 4px 0; color: var(--altin); }
+        .time-detail { display: none; font-size: 11px; margin-top: 5px; border-top: 1px solid #333; padding-top: 5px; }
+        .time-box.open .time-detail { display: block; }
+        .time-line { width: 2px; background: var(--altin); margin: 0 auto; opacity: 0.5; }
+
+        /* KARTLAR */
         .card-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 768px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
-        
-        .info-card { 
-            background: var(--kart-bg); border: 1px solid rgba(197, 160, 89, 0.3);
-            padding: 20px; border-radius: 15px;
+        .info-card { background: var(--kart); border: 1px solid var(--vurgu); padding: 15px; border-radius: 12px; }
+        .info-card h3 { margin: 0 0 10px 0; font-family: 'Cinzel', serif; color: var(--altin); font-size: 1.1rem; }
+        .info-card p { margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.9; }
+
+        @media (min-width: 768px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+            .title { font-size: 1.3rem; }
+            .time-box { width: 200px; }
         }
-        .info-card h3 { color: var(--altin); font-family: 'Cinzel', serif; font-size: 1.2rem; margin-top: 0; }
-        .info-card p { font-size: 1rem; line-height: 1.5; margin-bottom: 0; }
-
-        .theme-toggle { font-size: 1.5rem; background: none; border: none; cursor: pointer; }
-
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
     <header class="header-container">
-        <div class="brand-box">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s" class="site-logo">
-            <h1 class="site-title">MEDENİYET ATLASI</h1>
+        <div class="brand">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s" class="logo">
+            <h1 class="title">MEDENİYET ATLASI</h1>
         </div>
-        <button id="theme-toggle" class="theme-toggle">🌙</button>
+        <button id="theme-btn" style="background:none; border:none; font-size:20px; cursor:pointer;">🌙</button>
     </header>
 
-    <section class="hero">
-        <h1>DİJİTAL RAHLE</h1>
-        <p>İlmin izinde interaktif bir yolculuk.</p>
-    </section>
-
-    <div class="search-container">
-        <input type="text" id="site-search" class="search-input" placeholder="Bilgin, eser veya dönem ara...">
+    <div class="top-tools">
+        <input type="text" id="main-search" class="search-box" placeholder="İsim, dönem veya eser ara...">
     </div>
 
-    <section id="time-sec">
-        <h2 style="text-align:center; font-family:'Cinzel'; color:var(--altin);">Zaman Tüneli</h2>
-        <p style="text-align:center; font-size:0.8rem; opacity:0.6;">← Sağa sola kaydırın, detay için kartlara tıklayın →</p>
-        <div class="timeline-container">
-            <div class="timeline-wrapper" id="scroll-area">
-                <div class="timeline-rail" id="rail"></div>
-            </div>
+    <section class="section">
+        <h2 class="sec-title">Medeniyet Havzaları</h2>
+        <div class="map-btns" id="map-btns"></div>
+        <div id="map-viewer">
+            <img id="map-img" src="">
+            <div id="map-msg" style="text-align:center; padding:80px 20px; font-size:13px; opacity:0.5;">İncelemek istediğiniz haritayı seçin.</div>
         </div>
     </section>
 
-    <div id="dynamic-sections" class="container"></div>
+    <section class="timeline-area">
+        <h2 class="sec-title">Zamanın Ruhu</h2>
+        <p style="text-align:center; font-size:11px; margin-top:-10px; opacity:0.6;">← Sağa-Sola Kaydırın / Kartlara Tıklayın →</p>
+        <div class="timeline-wrapper" id="scroll-area">
+            <div class="timeline-rail" id="rail"></div>
+        </div>
+    </section>
+
+    <div id="dynamic-content" class="section"></div>
 
     <script>
-        const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
-        let allData = {};
+        const API = "https://api.npoint.io/c55382ed5004a784e99b";
+        let dataStore = null;
 
-        async function init() {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            allData = data;
+        async function start() {
+            const res = await fetch(API);
+            dataStore = await res.json();
             
-            renderTimeline();
-            renderCategories();
+            setupMaps();
+            setupTimeline();
+            setupCards();
         }
 
-        function renderTimeline() {
+        function setupMaps() {
+            const btnArea = document.getElementById('map-btns');
+            const img = document.getElementById('map-img');
+            const msg = document.getElementById('map-msg');
+
+            dataStore.harita_gorselleri.forEach(m => {
+                const b = document.createElement('button');
+                b.className = 'map-btn';
+                b.innerText = m.baslik;
+                b.onclick = () => {
+                    document.querySelectorAll('.map-btn').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    msg.style.display = 'none';
+                    img.src = m.url;
+                    img.style.display = 'block';
+                };
+                btnArea.appendChild(b);
+            });
+        }
+
+        function setupTimeline() {
             const rail = document.getElementById('rail');
             const startYear = 571;
-            // Mobilde zoomFactor'ü biraz daha artırdım ki olaylar üst üste binmesin
-            const zoomFactor = window.innerWidth < 768 ? 50 : 70; 
+            const zoom = window.innerWidth < 768 ? 45 : 65;
             
-            let events = [...allData.kronoloji];
-            // Kategorilerdeki tarihli verileri de tünele ekle
-            allData.kategoriler.forEach(kat => {
-                kat.liste.forEach(item => {
-                    let y = item.ad.match(/\d{3,4}/);
-                    if(y) events.push({yil: parseInt(y[0]), olay: item.ad.split('(')[0], ozet: item.ozet});
+            let items = [...dataStore.kronoloji];
+            dataStore.kategoriler.forEach(k => {
+                k.liste.forEach(l => {
+                    let y = l.ad.match(/\d{3,4}/);
+                    if(y) items.push({yil: parseInt(y[0]), olay: l.ad.split('(')[0], ozet: l.ozet});
                 });
             });
-            events.sort((a,b) => a.yil - b.yil);
+            items.sort((a,b) => a.yil - b.yil);
 
-            rail.style.width = (2030 - startYear) * zoomFactor + "px";
-            
-            const slots = [];
-            events.forEach(e => {
-                const x = (e.yil - startYear) * zoomFactor;
+            rail.style.width = (2030 - startYear) * zoom + "px";
+
+            const levels = [];
+            items.forEach(ev => {
+                const x = (ev.yil - startYear) * zoom;
                 let lvl = 0;
-                // Dikey boşluğu mobilde 70px'e düşürdüm (eskiden 100+ idi)
-                while(slots[lvl]?.some(r => x < r.e && x + 180 > r.s)) lvl++;
-                if(!slots[lvl]) slots[lvl] = [];
-                slots[lvl].push({s: x, e: x + 180});
+                while(levels[lvl]?.some(r => x < r.e && x + 160 > r.s)) lvl++;
+                if(!levels[lvl]) levels[lvl] = [];
+                levels[lvl].push({s: x, e: x + 160});
 
                 const box = document.createElement('div');
                 box.className = 'time-box';
                 box.style.left = x + "px";
-                box.style.bottom = (60 + (lvl * 85)) + "px"; // Katmanlar arası boşluk azaldı
+                const h = 50 + (lvl * 90);
+                box.style.bottom = "0px"; // Rayın üstünde duracaklar
                 
                 box.innerHTML = `
-                    <div class="box-content" onclick="this.parentElement.classList.toggle('expanded')">
-                        <span style="color:var(--altin); font-weight:800;">${e.yil}</span>
-                        <strong>${e.olay}</strong>
-                        <div class="details-text">${e.ozet}</div>
+                    <div class="time-content" onclick="this.parentElement.classList.toggle('open')">
+                        <strong>${ev.yil}</strong>
+                        <span>${ev.olay}</span>
+                        <div class="time-detail">${ev.ozet}</div>
                     </div>
-                    <div style="width:2px; height:${40 + (lvl * 85)}px; background:var(--altin); opacity:0.3; margin:auto;"></div>
+                    <div class="time-line" style="height:${h}px"></div>
                 `;
+                box.style.transform = `translate(-50%, -${h}px)`;
                 rail.appendChild(box);
             });
         }
 
-        function renderCategories() {
-            const area = document.getElementById('dynamic-sections');
-            allData.kategoriler.forEach(kat => {
-                const sec = document.createElement('section');
-                sec.innerHTML = `<h2 style="font-family:'Cinzel'; color:var(--altin); margin-top:40px;">${kat.baslik}</h2><div class="card-grid"></div>`;
-                const grid = sec.querySelector('.card-grid');
+        function setupCards() {
+            const area = document.getElementById('dynamic-content');
+            dataStore.kategoriler.forEach(kat => {
+                const s = document.createElement('section');
+                s.innerHTML = `<h2 class="sec-title">${kat.baslik}</h2><div class="card-grid"></div>`;
+                const grid = s.querySelector('.card-grid');
                 kat.liste.forEach(item => {
                     grid.innerHTML += `
-                        <div class="info-card" data-content="${item.ad.toLowerCase()} ${item.ozet.toLowerCase()}">
+                        <div class="info-card" data-txt="${item.ad.toLowerCase()} ${item.ozet.toLowerCase()}">
                             <h3>${item.ad}</h3>
                             <p>${item.ozet}</p>
                         </div>`;
                 });
-                area.appendChild(sec);
+                area.appendChild(s);
             });
         }
 
-        // Arama Motoru
-        document.getElementById('site-search').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.info-card').forEach(card => {
-                card.style.display = card.dataset.content.includes(term) ? 'block' : 'none';
+        // Arama
+        document.getElementById('main-search').addEventListener('input', (e) => {
+            const t = e.target.value.toLowerCase();
+            document.querySelectorAll('.info-card').forEach(c => {
+                c.style.display = c.dataset.txt.includes(t) ? 'block' : 'none';
             });
-            // Tünel filtreleme mobilde karışık olabilir, o yüzden şimdilik kartlara odaklandık
         });
 
-        // Tema Değiştirici
-        document.getElementById('theme-toggle').addEventListener('click', () => {
+        // Tema
+        document.getElementById('theme-btn').onclick = () => {
             document.body.classList.toggle('light-mode');
-            document.getElementById('theme-toggle').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
-        });
+            document.getElementById('theme-btn').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+        };
 
-        init();
+        // SWIPE / KAYDIRMA DESTEĞİ
+        const scrollArea = document.getElementById('scroll-area');
+        let isDown = false, startX, scrollL;
+
+        const startDragging = (e) => {
+            isDown = true;
+            startX = (e.pageX || e.touches[0].pageX) - scrollArea.offsetLeft;
+            scrollL = scrollArea.scrollLeft;
+        };
+        const stopDragging = () => isDown = false;
+        const moveDragging = (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = (e.pageX || e.touches[0].pageX) - scrollArea.offsetLeft;
+            scrollArea.scrollLeft = scrollL - (x - startX) * 2;
+        };
+
+        scrollArea.addEventListener('mousedown', startDragging);
+        scrollArea.addEventListener('touchstart', startDragging);
+        scrollArea.addEventListener('mouseup', stopDragging);
+        scrollArea.addEventListener('touchend', stopDragging);
+        scrollArea.addEventListener('mousemove', moveDragging);
+        scrollArea.addEventListener('touchmove', moveDragging);
+
+        start();
     </script>
 </body>
 </html>

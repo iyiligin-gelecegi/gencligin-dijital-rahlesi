@@ -136,64 +136,71 @@
         }
         #main-map-img { max-width: 100%; height: auto; transition: opacity 0.5s ease; }
 
-        /* =========================================
-           5. MERKEZİ KRONOLOJİ (ZIG-ZAG TASARIM)
+       /* =========================================
+           5. MERKEZİ KRONOLOJİ (ZOOM VE ZIG-ZAG)
         ========================================= */
-        .chronology-section { background: var(--accent); padding: 80px 0; overflow: hidden; }
+        .chronology-section { 
+            background: var(--accent); 
+            padding: 80px 0; 
+            overflow: hidden; 
+            position: relative;
+        }
         
+        /* Zoom Butonları */
+        .zoom-overlay {
+            position: absolute; top: 20px; right: 20px; z-index: 1000;
+            display: flex; gap: 8px; align-items: center;
+        }
+        .z-btn {
+            background: var(--bg-card); border: 1px solid var(--gold); color: var(--gold);
+            width: 35px; height: 35px; border-radius: 8px; cursor: pointer; font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .z-btn:hover { background: var(--gold); color: #000; }
+
         .timeline-viewport {
-            overflow-x: auto; padding: 350px 0; cursor: grab;
+            overflow-x: auto; padding: 250px 0; cursor: grab;
             scrollbar-width: none; -webkit-overflow-scrolling: touch;
+            position: relative; height: 600px;
         }
         .timeline-viewport::-webkit-scrollbar { display: none; }
         
-        /* Cetvel Ortada */
         .timeline-container { 
-            position: relative; height: 6px; background: var(--gold); 
-            border-radius: 3px; margin: 0 150px;
+            position: absolute; top: 50%; height: 6px; background: var(--gold); 
+            border-radius: 3px; transition: width 0.2s ease-out;
         }
         
-        /* Yıl Etiketleri (Cetvelin Hemen Altında) */
         .ruler-year {
-            position: absolute; top: 15px; transform: translateX(-50%);
-            font-size: 0.7rem; color: var(--gold); font-weight: bold; opacity: 0.5;
+            position: absolute; top: 18px; transform: translateX(-50%);
+            font-size: 0.75rem; color: var(--gold); font-weight: bold; white-space: nowrap;
         }
-        .ruler-year.major { opacity: 1; font-size: 0.9rem; top: 18px; }
+        .ruler-month {
+            position: absolute; top: 32px; transform: translateX(-50%);
+            font-size: 0.6rem; color: var(--text-dim); opacity: 0.7; white-space: nowrap;
+        }
 
         .timeline-item {
-            position: absolute; width: 240px; transform: translateX(-50%);
+            position: absolute; width: 220px; transform: translateX(-50%);
             display: flex; flex-direction: column; align-items: center;
         }
-
-        /* Yukarı bakan kartlar */
-        .timeline-item.up { bottom: 6px; flex-direction: column; }
-        /* Aşağı bakan kartlar */
-        .timeline-item.down { top: 6px; flex-direction: column-reverse; }
+        .timeline-item.up { bottom: 12px; flex-direction: column; }
+        .timeline-item.down { top: 12px; flex-direction: column-reverse; }
 
         .timeline-card {
-            background: var(--bg-card); border: 2px solid var(--gold); padding: 15px;
+            background: var(--bg-card); border: 2px solid var(--gold); padding: 12px;
             border-radius: 12px; cursor: pointer; transition: var(--transition);
-            width: 100%; box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            z-index: 10;
+            width: 100%; box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 10;
         }
-        .timeline-card:hover { transform: scale(1.05); border-color: #fff; }
-        .timeline-card h4 { color: var(--gold); margin-bottom: 5px; font-size: 0.95rem; line-height: 1.3; }
-        .year-badge { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 0.75rem; }
+        .timeline-card:hover { transform: scale(1.05); background: var(--gold); color: #000; }
+        .timeline-card:hover * { color: #000 !important; }
+        .timeline-card h4 { color: var(--gold); margin-bottom: 5px; font-size: 0.85rem; }
+        .year-badge { background: var(--gold); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 0.7rem; }
         
-        .long-desc { 
-            max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
-            font-size: 0.8rem; color: var(--text-dim); margin-top: 10px; border-top: 1px solid var(--accent); padding-top: 8px;
-        }
-        .timeline-item.active .long-desc { max-height: 250px; }
+        .long-desc { max-height: 0; overflow: hidden; transition: 0.4s; font-size: 0.75rem; color: var(--text-dim); }
+        .timeline-item.active .long-desc { max-height: 200px; margin-top: 8px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 5px; }
 
-        /* Bağlantı Çizgisi */
-        .connector-line { 
-            width: 2px; background: linear-gradient(to bottom, var(--gold), transparent);
-            opacity: 0.6;
-        }
-        .timeline-item.up .connector-line { background: linear-gradient(to top, var(--gold), transparent); }
-
-        /* =========================================
+        .connector-line { width: 2px; background: var(--gold); opacity: 0.5; }
+        
            6. BİLGİ KARTLARI VE FOOTER
         ========================================= */
         .grid-layout { display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 30px; }
@@ -251,9 +258,15 @@
         </div>
     </section>
 
-    <section id="chrono-section" class="chronology-section">
+<section id="chrono-section" class="chronology-section">
         <div class="section-header"><h2>Zamanın Ruhu</h2></div>
-        <div class="timeline-scroll-hint">← 571'DEN 2026'YA - KARTLARA TIKLAYARAK DETAYI AÇIN →</div>
+        
+        <div class="zoom-overlay">
+            <span style="color:var(--gold); font-size:0.65rem;">CTRL + SCROLL</span>
+            <button class="z-btn" onclick="adjustZoom(1.4)">+</button>
+            <button class="z-btn" onclick="adjustZoom(0.7)">-</button>
+        </div>
+
         <div class="timeline-viewport" id="swipe-area">
             <div id="timeline-rail" class="timeline-container">
                 </div>
@@ -307,23 +320,86 @@
         }
 
         // 2. KRONOLOJİ (ZIG-ZAG VE MERKEZİ CETVEL)
+      let currentZoom = 100; // Başlangıç genişliği (px/yıl)
+        const START_Y = 571, END_Y = 2026;
+
         function initChronology() {
             const rail = document.getElementById('timeline-rail');
-            const startYear = 571, endYear = 2026, gap = 90; // Yıllar arası mesafe
+            const view = document.getElementById('swipe-area');
+            rail.innerHTML = '';
             
-            rail.style.width = (endYear - startYear) * gap + "px";
+            rail.style.width = (END_Y - START_Y) * currentZoom + "px";
 
-            // 571-2026 Cetvel Etiketleri
-            for(let y = startYear; y <= endYear; y++) {
-                const x = (y - startYear) * gap;
-                if(y % 5 === 0 || y === startYear || y === endYear) {
-                    const label = document.createElement('div');
-                    label.className = `ruler-year ${y % 10 === 0 ? 'major' : ''}`;
-                    label.style.left = x + "px";
-                    label.innerText = y;
-                    rail.appendChild(label);
+            // 1. Cetvel (Yıllar ve Yakınlaşınca Aylar)
+            for (let y = START_Y; y <= END_Y; y++) {
+                const x = (y - START_Y) * currentZoom;
+                
+                // Yıl Etiketi
+                const label = document.createElement('div');
+                label.className = 'ruler-year';
+                label.style.left = x + "px";
+                label.innerText = y;
+                rail.appendChild(label);
+
+                // Zoom 500px üzerindeyse ayları göster
+                if (currentZoom > 500) {
+                    for (let m = 1; m <= 11; m++) {
+                        const mx = x + (m * (currentZoom / 12));
+                        const mLabel = document.createElement('div');
+                        mLabel.className = 'ruler-month';
+                        mLabel.style.left = mx + "px";
+                        mLabel.innerText = m + ". Ay";
+                        rail.appendChild(mLabel);
+                    }
                 }
             }
+
+            // 2. Olaylar
+            let allEvents = [...rawData.kronoloji];
+            allEvents.sort((a,b) => a.yil - b.yil);
+
+            allEvents.forEach((ev, i) => {
+                // Ay bilgisi varsa x konumunu daha hassas hesapla
+                const ayShift = ev.ay ? (ev.ay - 1) * (currentZoom / 12) : 0;
+                const x = (ev.yil - START_Y) * currentZoom + ayShift;
+                const side = (i % 2 === 0) ? 'up' : 'down';
+                
+                const item = document.createElement('div');
+                item.className = `timeline-item ${side}`;
+                item.style.left = x + "px";
+                
+                item.innerHTML = `
+                    <div class="timeline-card" onclick="this.parentElement.classList.toggle('active')">
+                        <span class="year-badge">${ev.yil} ${ev.ay ? '/ '+ev.ay+'. Ay' : ''}</span>
+                        <h4>${ev.olay}</h4>
+                        <div class="long-desc">${ev.ozet || ''}</div>
+                    </div>
+                    <div class="connector-line" style="height:60px"></div>
+                `;
+                rail.appendChild(item);
+            });
+        }
+
+        // YENİ: Zoom Fonksiyonu
+        function adjustZoom(factor) {
+            const view = document.getElementById('swipe-area');
+            const oldZoom = currentZoom;
+            currentZoom = Math.max(60, Math.min(3000, currentZoom * factor));
+            
+            const center = view.scrollLeft + view.offsetWidth / 2;
+            const newScroll = (center / oldZoom) * currentZoom - view.offsetWidth / 2;
+            
+            initChronology(); // Cetveli tekrar çiz
+            view.scrollLeft = newScroll;
+        }
+
+        // YENİ: Tekerlek Zoom Dinleyicisi
+        document.getElementById('swipe-area').addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                adjustZoom(e.deltaY > 0 ? 0.8 : 1.2);
+            }
+        });
 
             // Olayları Topla
             let allEvents = [...rawData.kronoloji];

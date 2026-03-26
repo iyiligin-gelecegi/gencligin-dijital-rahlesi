@@ -3,680 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Medeniyet Atlası v3.0 | Dijital Rahle</title>
+    <title>Medeniyet Atlası v4.0 | Geleceğin Arşivi</title>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Orbitron:wght@400;700&family=Poppins:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Orbitron:wght@400;600;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* 
-           =========================================
-           1. CORE ENGINE & DESIGN TOKENS
-           ========================================= 
-        */
         :root {
             --neon-gold: #ffca28;
             --deep-gold: #c5a059;
-            --glow: 0 0 20px rgba(197, 160, 89, 0.4);
-            --bg-black: #050505;
-            --bg-glass: rgba(20, 20, 20, 0.8);
-            --text-silver: #e0e0e0;
-            --nav-h: 90px;
-            --ease-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --accent-cyan: #00f2ff;
+            --bg-dark: #020205;
+            --glass: rgba(15, 15, 25, 0.7);
+            --border-glow: 0 0 15px rgba(255, 202, 40, 0.3);
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-title: 'Orbitron', sans-serif;
         }
 
-        body.light-mode {
-            --bg-black: #f0f0f0;
-            --bg-glass: rgba(255, 255, 255, 0.9);
-            --text-silver: #1a1a1a;
-            --deep-gold: #a67c00;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-black);
-            color: var(--text-silver);
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: var(--font-main);
             overflow-x: hidden;
-            perspective: 1000px;
+            line-height: 1.6;
         }
 
-        /* Arka Plan Animasyonu */
-        body::before {
-            content: "";
+        /* Dinamik Arka Plan */
+        #star-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(197, 160, 89, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(197, 160, 89, 0.05) 0%, transparent 50%);
             z-index: -1;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
         }
 
-        /* 
-           =========================================
-           2. NAVIGATION (CYBER-PUNK STYLE)
-           ========================================= 
-        */
-        .header-cyber {
+        /* --- NAVIGASYON --- */
+        .nav-os {
             position: fixed;
-            top: 20px; left: 50%;
+            top: 15px; left: 50%;
             transform: translateX(-50%);
-            width: 90%;
+            width: 95%;
             max-width: 1200px;
-            height: 70px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--deep-gold);
-            border-radius: 50px;
-            z-index: 10000;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 202, 40, 0.2);
+            border-radius: 20px;
+            padding: 10px 25px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: var(--glow);
-            animation: slideDown 1s var(--ease-out);
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        @keyframes slideDown {
-            from { top: -100px; opacity: 0; }
-            to { top: 20px; opacity: 1; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { 
+            width: 40px; height: 40px; 
+            border: 2px solid var(--neon-gold); 
+            border-radius: 12px;
+            rotate: 45deg;
+            display: flex; align-items: center; justify-content: center;
         }
+        .brand-logo img { rotate: -45deg; width: 80%; border-radius: 5px; }
+        .brand-name { font-family: var(--font-title); font-weight: 900; font-size: 1rem; letter-spacing: 2px; color: var(--neon-gold); }
 
-        .logo-wrap { display: flex; align-items: center; gap: 15px; }
-        .logo-ring {
-            width: 45px; height: 45px;
-            border: 2px dashed var(--neon-gold);
-            border-radius: 50%;
-            padding: 2px;
-            animation: rotateRing 10s linear infinite;
-        }
-        @keyframes rotateRing { to { transform: rotate(360deg); } }
-
-        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-
-        .logo-text h1 {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.2rem;
-            background: linear-gradient(90deg, #fff, var(--neon-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .theme-trigger {
-            background: none; border: 1px solid var(--deep-gold);
-            color: var(--neon-gold); width: 40px; height: 40px;
-            border-radius: 50%; cursor: pointer; transition: 0.3s;
-        }
-        .theme-trigger:hover { background: var(--neon-gold); color: #000; box-shadow: var(--glow); }
-
-        /* 
-           =========================================
-           3. INTERACTIVE MAPS (LENS EFFECT)
-           ========================================= 
-        */
-        .map-section {
-            padding: 140px 5% 60px;
+        /* --- HARİTA MODÜLÜ (MOBİL ODAKLI) --- */
+        .map-universe {
+            padding: 120px 20px 40px;
             text-align: center;
         }
 
-        .map-glare-box {
+        .map-container {
             position: relative;
             width: 100%;
-            max-width: 1000px;
-            margin: 40px auto;
-            border-radius: 30px;
-            overflow: hidden;
-            border: 2px solid var(--deep-gold);
+            max-width: 1100px;
+            margin: 30px auto;
+            aspect-ratio: 16/9;
             background: #000;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            transform-style: preserve-3d;
-            transition: 0.5s;
+            border-radius: 25px;
+            border: 2px solid var(--deep-gold);
+            overflow: hidden;
+            touch-action: none; /* Manuel Zoom İçin */
+            box-shadow: var(--border-glow);
         }
 
-        .map-glare-box:hover { transform: scale(1.02) rotateX(2deg); }
-
-        #main-map-img {
+        #map-canvas {
             width: 100%;
-            height: auto;
-            min-height: 400px;
-            object-fit: contain;
-            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: brightness(0.8) contrast(1.2);
+            height: 100%;
+            object-fit: cover;
+            cursor: grab;
+            transition: transform 0.1s ease-out;
         }
 
-        .map-nav-grid {
+        .map-controls {
             display: flex;
             justify-content: center;
+            gap: 10px;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
+            margin-top: 20px;
         }
 
-        .map-chip {
-            padding: 12px 25px;
-            background: var(--bg-glass);
+        .map-btn {
+            background: var(--glass);
             border: 1px solid var(--deep-gold);
-            border-radius: 15px;
-            color: var(--neon-gold);
-            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: var(--font-title);
             font-size: 0.7rem;
             cursor: pointer;
-            transition: 0.4s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .map-chip.active {
-            background: var(--neon-gold);
-            color: #000;
-            box-shadow: var(--glow);
-            transform: translateY(-5px);
-        }
-
-        /* 
-           =========================================
-           4. CHRONOLOGY (THE INFINITE FLOW)
-           ========================================= 
-        */
-        .chrono-container {
-            position: relative;
-            background: linear-gradient(to bottom, transparent, #111, transparent);
-            padding: 100px 0;
-            margin: 80px 0;
-        }
-
-        .viewport-layer {
-            width: 100%;
-            height: 600px;
-            overflow-x: auto;
-            cursor: grab;
-            position: relative;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        .viewport-layer::-webkit-scrollbar { display: none; }
-
-        .time-rail {
-            position: absolute;
-            top: 50%;
-            height: 6px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                var(--neon-gold) 20%, 
-                var(--neon-gold) 80%, 
-                transparent 100%);
-            transform: translateY(-50%);
-            box-shadow: 0 0 15px var(--deep-gold);
-        }
-
-        /* Zaman Cetveli */
-        .tick-mark {
-            position: absolute;
-            top: 50%;
-            width: 2px;
-            height: 20px;
-            background: rgba(197, 160, 89, 0.5);
-            transform: translateY(-50%);
-        }
-
-        .tick-label {
-            position: absolute;
-            top: 30px;
-            transform: translateX(-50%);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            color: var(--neon-gold);
-        }
-
-        /* Event Cards */
-        .chrono-node {
-            position: absolute;
-            width: 300px;
-            transform: translateX(-50%);
-            z-index: 50;
-            transition: 0.5s var(--ease-out);
-        }
-
-        .chrono-node.up { bottom: 60px; }
-        .chrono-node.down { top: 60px; flex-direction: column-reverse; display: flex; }
-
-        .node-card {
-            background: var(--bg-glass);
-            border: 2px solid var(--deep-gold);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            cursor: pointer;
-            transition: 0.4s;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .node-card:hover {
-            border-color: #fff;
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: var(--glow);
-        }
-
-        .node-card h3 {
-            font-family: 'Cinzel Decorative', serif;
-            color: var(--neon-gold);
-            font-size: 1rem;
-            margin: 10px 0;
-        }
-
-        .badge-year {
-            background: var(--neon-gold);
-            color: #000;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-weight: 900;
-            font-size: 0.8rem;
-        }
-
-        /* Expandable Content (Özet Bölümü) */
-        .node-summary {
-            max-height: 0;
-            opacity: 0;
-            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            color: #fff;
-            font-size: 0.85rem;
-            line-height: 1.5;
-            padding-top: 0;
-        }
-
-        .chrono-node.active .node-summary {
-            max-height: 300px;
-            opacity: 1;
-            padding-top: 15px;
-            margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Peygamber Efendimiz (sav) Özel Animasyon */
-        .prophet-node .node-card {
-            border: 3px solid #fff;
-            animation: holyGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes holyGlow {
-            0%, 100% { box-shadow: 0 0 20px #fff; }
-            50% { box-shadow: 0 0 50px var(--neon-gold); }
-        }
-
-        .connector-cyber {
-            width: 3px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--neon-gold), transparent);
-            margin: 0 auto;
-        }
-
-        .chrono-node.down .connector-cyber {
-            background: linear-gradient(to top, var(--neon-gold), transparent);
-        }
-
-        /* 
-           =========================================
-           5. SEARCH & KNOWLEDGE GRID
-           ========================================= 
-        */
-        .search-engine {
-            padding: 40px 5%;
-            text-align: center;
-        }
-
-        .cyber-input {
-            width: 100%;
-            max-width: 700px;
-            padding: 20px 40px;
-            background: var(--bg-glass);
-            border: 2px solid var(--deep-gold);
-            border-radius: 100px;
-            color: #fff;
-            font-size: 1.2rem;
-            font-family: 'Orbitron', sans-serif;
-            transition: 0.4s;
-        }
-
-        .cyber-input:focus {
-            outline: none;
-            box-shadow: var(--glow);
-            width: 80%;
-        }
-
-        .knowledge-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            padding: 40px 5%;
-        }
-
-        .knowledge-card {
-            background: var(--bg-glass);
-            border-radius: 25px;
-            padding: 30px;
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            transition: 0.5s var(--ease-out);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .knowledge-card::after {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
-        }
-
-        .knowledge-card:hover {
-            transform: translateY(-15px) rotateZ(1deg);
-            border-color: var(--neon-gold);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .knowledge-card:hover::after { left: 100%; }
-
-        .knowledge-card h2 {
-            font-family: 'Cinzel Decorative', serif;
-            color: var(--neon-gold);
-            margin-bottom: 15px;
-        }
-
-        /* 
-           =========================================
-           6. ZOOM CONTROLS
-           ========================================= 
-        */
-        .float-controls {
-            position: fixed;
-            bottom: 40px; right: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 9999;
-        }
-
-        .btn-round {
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            background: var(--neon-gold);
-            border: none;
-            color: #000;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             transition: 0.3s;
         }
 
-        .btn-round:hover { transform: scale(1.1) rotate(90deg); }
+        .map-btn.active { background: var(--neon-gold); color: #000; font-weight: bold; }
 
-        /* Mobil Duyarlılık */
-        @media (max-width: 768px) {
-            .header-cyber { height: 60px; padding: 0 15px; }
-            .logo-text h1 { font-size: 0.9rem; }
-            .map-chip { font-size: 0.6rem; padding: 10px 15px; }
-            .chrono-node { width: 220px; }
-            .knowledge-grid { grid-template-columns: 1fr; }
+        /* --- KRONOLOJİ (GELİŞMİŞ MOTOR) --- */
+        .timeline-portal {
+            height: 500px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #020205 0%, transparent 15%, transparent 85%, #020205 100%);
         }
 
+        .time-track {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 50vw;
+            will-change: transform;
+            cursor: grab;
+        }
+
+        .time-line-axis {
+            position: absolute;
+            top: 50%; left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-gold), var(--accent-cyan));
+            box-shadow: 0 0 20px var(--neon-gold);
+        }
+
+        .event-node {
+            position: absolute;
+            min-width: 280px;
+            transition: 0.4s var(--ease-out);
+        }
+
+        .event-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--neon-gold);
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            transform-origin: center;
+        }
+
+        .event-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--accent-cyan);
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .event-year {
+            font-family: var(--font-title);
+            font-weight: 900;
+            color: var(--neon-gold);
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* --- ARAMA VE BİLGİ --- */
+        .search-zone { padding: 0 20px; max-width: 800px; margin: 0 auto; }
+        .cyber-search {
+            width: 100%;
+            background: var(--glass);
+            border: 2px solid var(--deep-gold);
+            padding: 18px 30px;
+            border-radius: 50px;
+            color: #fff;
+            font-family: var(--font-title);
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .grid-system {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 50px 5%;
+        }
+
+        .data-cube {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            transition: 0.4s;
+        }
+
+        .data-cube:hover { border-color: var(--accent-cyan); transform: translateY(-10px); }
+
+        /* Mobil Nav Alt */
+        .mobile-dock {
+            position: fixed;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            gap: 20px;
+            border: 1px solid rgba(255,202,40,0.3);
+            z-index: 2000;
+        }
+
+        .dock-tool { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #fff; }
+
+        @media (max-width: 768px) {
+            .event-node { min-width: 220px; }
+            .brand-name { font-size: 0.8rem; }
+            .timeline-portal { height: 400px; }
+        }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
-    <!-- Navigasyon -->
-    <header class="header-cyber">
-        <div class="logo-wrap">
-            <div class="logo-ring">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s" class="logo-img" alt="Logo">
-            </div>
-            <div class="logo-text">
-                <h1>MEDENİYET ATLASI</h1>
-            </div>
-        </div>
-        <button class="theme-trigger" id="theme-btn">🌙</button>
-    </header>
+    <canvas id="star-canvas"></canvas>
 
-    <!-- Harita Bölümü -->
-    <section class="map-section">
-        <h2 style="font-family:'Cinzel Decorative'; color:var(--neon-gold); margin-bottom:30px; letter-spacing:5px;">STRATEJİK HAVZALAR</h2>
-        <div class="map-nav-grid" id="map-tabs"></div>
-        <div class="map-glare-box">
-            <img id="main-map-img" src="" alt="Yükleniyor...">
+    <nav class="nav-os">
+        <div class="brand">
+            <div class="brand-logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5kDqyb7ISRa7uW-xKuMKc0YuEadhUjs7p2Q&s" alt="Logo">
+            </div>
+            <div class="brand-name">MEDENİYET ATLASI v4.0</div>
         </div>
+        <div id="status-tag" style="font-size: 0.6rem; color: var(--accent-cyan); font-family: 'Orbitron';">SYNC: OK</div>
+    </nav>
+
+    <section class="map-universe">
+        <h2 style="font-family: 'Cinzel Decorative'; margin-bottom: 10px;">DİJİTAL KARTOGRAFİ</h2>
+        <p style="opacity: 0.6; font-size: 0.8rem;">Haritayı kaydırmak ve büyütmek için dokunun.</p>
+        
+        <div class="map-container" id="map-frame">
+            <img id="map-canvas" src="" alt="Yükleniyor...">
+        </div>
+
+        <div class="map-controls" id="map-selectors"></div>
     </section>
 
-    <!-- Arama Bölümü -->
-    <section class="search-engine">
-        <input type="text" class="cyber-input" id="master-search" placeholder="GEÇMİŞE BİR PENCERE AÇIN...">
-    </section>
+    <div class="search-zone">
+        <input type="text" class="cyber-search" id="global-search" placeholder="ARŞİVDE ARA: örn. 'İstanbul' ">
+    </div>
 
-    <!-- Kronoloji Ünitesi -->
-    <div class="chrono-container">
-        <div class="viewport-layer" id="viewport">
-            <div class="time-rail" id="rail">
-                <!-- JS ile dolacak -->
+    <div class="timeline-portal" id="portal">
+        <div class="time-track" id="track">
+            <div class="time-line-axis" id="axis"></div>
             </div>
-        </div>
     </div>
 
-    <!-- Bilgi Kartları -->
-    <section class="knowledge-grid" id="knowledge-root"></section>
+    <div class="grid-system" id="knowledge-base"></div>
 
-    <!-- Sabit Kontroller -->
-    <div class="float-controls">
-        <button class="btn-round" onclick="changeZoom(1.2)">+</button>
-        <button class="btn-round" onclick="changeZoom(0.8)">-</button>
+    <div class="mobile-dock">
+        <button class="dock-tool" onclick="zoomTime(1.2)">➕</button>
+        <button class="dock-tool" onclick="zoomTime(0.8)">➖</button>
+        <button class="dock-tool" id="theme-swap">🌓</button>
     </div>
 
-    <!-- 
-       =========================================
-       7. JAVASCRIPT: THE BRAIN
-       ========================================= 
-    -->
     <script>
-        const ATLAS_API = "https://api.npoint.io/c55382ed5004a784e99b";
-        let data = null;
-        let zoom = 100; // Yıl başına düşen piksel
-        const START = 571;
-        const END = 2026;
+        const API_URL = "https://api.npoint.io/c55382ed5004a784e99b";
+        let state = {
+            data: null,
+            zoom: 120, // yıl başına piksel
+            isDragging: false,
+            startX: 0,
+            scrollLeft: 0,
+            mapScale: 1,
+            mapPos: {x: 0, y: 0}
+        };
 
-        // Uygulamayı Başlat
-        async function init() {
+        async function startApp() {
             try {
-                const response = await fetch(ATLAS_API + "?t=" + Date.now());
-                data = await response.json();
+                const res = await fetch(`${API_URL}?cache=${Math.random()}`);
+                state.data = await res.json();
                 
+                initStars();
                 renderMaps();
-                renderChrono();
-                renderKnowledge();
-                initDrag();
-                initSearch();
-                initTheme();
-            } catch (e) {
-                console.error("Atlas yüklenemedi: ", e);
+                renderTimeline();
+                renderCards();
+                initInteractions();
+            } catch (err) {
+                console.error("Sistem Hatası:", err);
             }
         }
 
-        // 1. Harita Mantığı (Gelişmiş)
-        function renderMaps() {
-            const container = document.getElementById('map-tabs');
-            const img = document.getElementById('main-map-img');
-            
-            data.harita_gorselleri.forEach((m, i) => {
-                const chip = document.createElement('div');
-                chip.className = `map-chip ${i === 0 ? 'active' : ''}`;
-                chip.innerText = m.baslik;
-                
-                if(i===0) img.src = m.url;
+        // --- ARKA PLAN YILDIZLAR ---
+        function initStars() {
+            const canvas = document.getElementById('star-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-                chip.onclick = () => {
-                    document.querySelectorAll('.map-chip').forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
-                    img.style.opacity = '0';
-                    img.style.transform = 'scale(0.95) rotateY(10deg)';
-                    
+            const stars = Array.from({length: 200}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                v: Math.random() * 0.5
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#fff";
+                stars.forEach(s => {
+                    s.y -= s.v;
+                    if(s.y < 0) s.y = canvas.height;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // --- HARİTA MOTORU (DOKUNMATİK UYUMLU) ---
+        function renderMaps() {
+            const container = document.getElementById('map-selectors');
+            const img = document.getElementById('map-canvas');
+            
+            state.data.harita_gorselleri.forEach((m, i) => {
+                const btn = document.createElement('button');
+                btn.className = `map-btn ${i===0 ? 'active' : ''}`;
+                btn.innerText = m.baslik;
+                btn.onclick = () => {
+                    document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    img.style.opacity = 0;
                     setTimeout(() => {
                         img.src = m.url;
-                        img.style.opacity = '1';
-                        img.style.transform = 'scale(1) rotateY(0deg)';
-                    }, 400);
+                        img.style.opacity = 1;
+                    }, 300);
                 };
-                container.appendChild(chip);
+                container.appendChild(btn);
+                if(i===0) img.src = m.url;
             });
+
+            // Map Zoom & Pan (Basit sürüm)
+            let mDown = false;
+            let mStart = {x:0, y:0};
+            img.addEventListener('touchstart', e => { mDown = true; mStart = {x: e.touches[0].clientX, y: e.touches[0].clientY}; });
+            img.addEventListener('touchmove', e => {
+                if(!mDown) return;
+                const moveX = e.touches[0].clientX - mStart.x;
+                img.style.transform = `translateX(${moveX}px) scale(1.5)`;
+            });
+            img.addEventListener('touchend', () => { mDown = false; setTimeout(() => img.style.transform = 'scale(1)', 1000); });
         }
 
-        // 2. Kronoloji Mantığı (Sonsuz Kaydırma + Her Sene)
-        function renderChrono() {
-            const rail = document.getElementById('rail');
-            rail.innerHTML = '';
+        // --- KRONOLOJİ MOTORU ---
+        function renderTimeline() {
+            const track = document.getElementById('track');
+            const startYear = 571;
+            const endYear = 2026;
             
-            const totalWidth = (END - START) * zoom;
-            rail.style.width = (totalWidth + window.innerWidth) + "px";
+            track.innerHTML = '<div class="time-line-axis" id="axis"></div>';
+            const axis = document.getElementById('axis');
+            
+            const totalWidth = (endYear - startYear) * state.zoom;
+            axis.style.width = totalWidth + "px";
 
-            // Zaman Çizgileri
-            for (let y = START; y <= END; y++) {
-                const x = (y - START) * zoom;
-                
-                // Tick
-                if (zoom > 40 || y % 10 === 0) {
-                    const tick = document.createElement('div');
-                    tick.className = 'tick-mark';
-                    tick.style.left = x + "px";
-                    rail.appendChild(tick);
-                }
-
-                // Yıl Etiketi
-                if ( (zoom < 50 && y % 50 === 0) || (zoom >= 50 && y % 10 === 0) ) {
-                    const label = document.createElement('div');
-                    label.className = 'tick-label';
-                    label.style.left = x + "px";
-                    label.innerText = y;
-                    rail.appendChild(label);
-                }
-            }
-
-            // Olaylar
-            let events = [...(data.kronoloji || [])];
-            events.sort((a,b) => a.yil - b.yil);
-
-            events.forEach((ev, i) => {
-                const x = (ev.yil - START) * zoom;
-                const side = (i % 2 === 0) ? 'up' : 'down';
-                const isProphet = ev.yil === 571;
-
+            state.data.kronoloji.sort((a,b) => a.yil - b.yil).forEach((ev, i) => {
+                const pos = (ev.yil - startYear) * state.zoom;
                 const node = document.createElement('div');
-                node.className = `chrono-node ${side} ${isProphet ? 'prophet-node' : ''}`;
-                node.style.left = x + "px";
-                node.style.animation = `fadeInUp 0.5s ease forwards ${i * 0.1}s`;
+                node.className = 'event-node';
+                node.style.left = `${pos}px`;
+                node.style.top = i % 2 === 0 ? '15%' : '55%';
 
                 node.innerHTML = `
-                    <div class="node-card" onclick="toggleNode(this)">
-                        <span class="badge-year">${ev.yil}</span>
-                        <h3>${ev.olay}</h3>
-                        <div class="node-summary">${ev.ozet || 'Bu dönem hakkında detaylı arşiv kaydı bekleniyor...'}</div>
+                    <div class="event-card">
+                        <span class="event-year">${ev.yil}</span>
+                        <strong style="color:var(--accent-cyan)">${ev.olay}</strong>
+                        <p style="font-size:0.8rem; margin-top:8px; display:none" class="details">${ev.ozet || ''}</p>
                     </div>
-                    <div class="connector-cyber"></div>
                 `;
-                rail.appendChild(node);
+
+                node.onclick = () => {
+                    const d = node.querySelector('.details');
+                    d.style.display = d.style.display === 'none' ? 'block' : 'none';
+                };
+
+                track.appendChild(node);
             });
         }
 
-        function toggleNode(card) {
-            const node = card.parentElement;
-            const isActive = node.classList.contains('active');
-            
-            document.querySelectorAll('.chrono-node').forEach(n => n.classList.remove('active'));
-            if(!isActive) node.classList.add('active');
+        function zoomTime(f) {
+            state.zoom = Math.max(30, Math.min(600, state.zoom * f));
+            renderTimeline();
         }
 
-        // 3. Bilgi Grid
-        function renderKnowledge() {
-            const root = document.getElementById('knowledge-root');
-            data.kategoriler.forEach(kat => {
-                kat.liste.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'knowledge-card';
-                    card.innerHTML = `
-                        <h2>${item.ad}</h2>
-                        <p style="color:var(--text-silver); opacity:0.8;">${item.ozet}</p>
+        // --- İNTERAKSİYONLAR ---
+        function initInteractions() {
+            const portal = document.getElementById('portal');
+            const track = document.getElementById('track');
+
+            const startDrag = (e) => {
+                state.isDragging = true;
+                state.startX = (e.pageX || e.touches[0].pageX) - portal.offsetLeft;
+                state.scrollLeft = portal.scrollLeft;
+                track.style.cursor = 'grabbing';
+            };
+
+            const doDrag = (e) => {
+                if (!state.isDragging) return;
+                e.preventDefault();
+                const x = (e.pageX || e.touches[0].pageX) - portal.offsetLeft;
+                const walk = (x - state.startX) * 2;
+                portal.scrollLeft = state.scrollLeft - walk;
+            };
+
+            portal.addEventListener('mousedown', startDrag);
+            portal.addEventListener('mousemove', doDrag);
+            portal.addEventListener('mouseup', () => state.isDragging = false);
+            portal.addEventListener('touchstart', startDrag);
+            portal.addEventListener('touchmove', doDrag);
+            portal.addEventListener('touchend', () => state.isDragging = false);
+
+            // Arama
+            document.getElementById('global-search').oninput = (e) => {
+                const term = e.target.value.toLowerCase();
+                document.querySelectorAll('.data-cube, .event-node').forEach(el => {
+                    const match = el.innerText.toLowerCase().includes(term);
+                    el.style.display = match ? 'block' : 'none';
+                    el.style.opacity = match ? 1 : 0.2;
+                });
+            };
+        }
+
+        function renderCards() {
+            const base = document.getElementById('knowledge-base');
+            state.data.kategoriler.forEach(cat => {
+                cat.liste.forEach(item => {
+                    const cube = document.createElement('div');
+                    cube.className = 'data-cube';
+                    cube.innerHTML = `
+                        <h3 style="color:var(--neon-gold); font-family:'Orbitron'; font-size:0.9rem">${item.ad}</h3>
+                        <p style="font-size:0.85rem; opacity:0.8; margin-top:10px">${item.ozet}</p>
                     `;
-                    root.appendChild(card);
+                    base.appendChild(cube);
                 });
             });
         }
 
-        // 4. Zoom Kontrol
-        function changeZoom(factor) {
-            const oldZoom = zoom;
-            zoom = Math.max(15, Math.min(500, zoom * factor));
-            renderChrono();
-        }
-
-        // 5. Kaydırma Motoru (Drag)
-        function initDrag() {
-            const v = document.getElementById('viewport');
-            let isDown = false;
-            let startX, sLeft;
-
-            v.addEventListener('mousedown', (e) => {
-                isDown = true;
-                v.style.cursor = 'grabbing';
-                startX = e.pageX - v.offsetLeft;
-                sLeft = v.scrollLeft;
-            });
-            v.addEventListener('mouseleave', () => isDown = false);
-            v.addEventListener('mouseup', () => isDown = false);
-            v.addEventListener('mousemove', (e) => {
-                if(!isDown) return;
-                const x = e.pageX - v.offsetLeft;
-                v.scrollLeft = sLeft - (x - startX) * 2;
-            });
-
-            // Mouse wheel zoom
-            v.addEventListener('wheel', (e) => {
-                if (e.ctrlKey) {
-                    e.preventDefault();
-                    e.deltaY < 0 ? changeZoom(1.1) : changeZoom(0.9);
-                }
-            }, {passive: false});
-        }
-
-        // 6. Arama Motoru
-        function initSearch() {
-            const input = document.getElementById('master-search');
-            input.oninput = (e) => {
-                const val = e.target.value.toLowerCase();
-                
-                // Kartları filtrele
-                document.querySelectorAll('.knowledge-card').forEach(c => {
-                    c.style.display = c.innerText.toLowerCase().includes(val) ? 'block' : 'none';
-                });
-
-                // Kronolojiyi filtrele (şeffaflık ile)
-                document.querySelectorAll('.chrono-node').forEach(n => {
-                    n.style.opacity = n.innerText.toLowerCase().includes(val) ? '1' : '0.1';
-                });
-            };
-        }
-
-        // 7. Tema Yönetimi
-        function initTheme() {
-            const btn = document.getElementById('theme-btn');
-            btn.onclick = () => {
-                document.body.classList.toggle('light-mode');
-                btn.innerText = document.body.classList.contains('light-mode') ? "☀️" : "🌙";
-            };
-        }
-
-        // Başlat
-        init();
-
+        window.onload = startApp;
     </script>
 </body>
 </html>
